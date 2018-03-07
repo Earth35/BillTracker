@@ -8,5 +8,11 @@ namespace TrackerLogic
 {
     public class DataEntry : Invoice
     {
+        public DataEntry(string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate, DateTime paymentDueDate,
+            DateTime paidOn, double totalAmountCharged) :
+            base(invoiceID, issuedBy, monthYearSymbol, issueDate, paymentDueDate, paidOn, totalAmountCharged)
+        {
+
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace TrackerLogic
         public double TotalAmountCharged { get; set; }
         public bool IsPaid { get; private set; }
 
-        public Invoice ( string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate, DateTime paymentDueDate,
+        public Invoice (string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate, DateTime paymentDueDate,
             DateTime paidOn, double totalAmountCharged)
         {
             InvoiceID = invoiceID;
