@@ -1,6 +1,6 @@
 ﻿namespace BillTracker
 {
-    partial class Form1
+    partial class BillTracker
     {
         /// <summary>
         /// Wymagana zmienna projektanta.

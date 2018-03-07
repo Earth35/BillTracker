@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillTracker", "BillTracker\BillTracker.csproj", "{1878F13D-5C80-4E13-B44D-E35B549A7250}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerLogic", "TrackerLogic\TrackerLogic.csproj", "{17F71A3D-0562-4F32-A78F-28B079EA9BD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1878F13D-5C80-4E13-B44D-E35B549A7250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1878F13D-5C80-4E13-B44D-E35B549A7250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1878F13D-5C80-4E13-B44D-E35B549A7250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
