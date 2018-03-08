@@ -22,7 +22,7 @@ namespace BillTracker
 
         private void DisplayDateAndTime()
         {
-            lblCurrentDateTime.Text = DateAndTime.GetCurrentDateAndTime();
+            lblCurrentDateTime.Text = Clock.GetCurrentDateAndTime();
         }
 
         private void tmrDateTime_Tick(object sender, EventArgs e)

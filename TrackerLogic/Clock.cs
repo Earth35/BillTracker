@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrackerLogic
 {
-    public static class DateAndTime
+    public static class Clock
     {
        public static string GetCurrentDateAndTime()
         {
