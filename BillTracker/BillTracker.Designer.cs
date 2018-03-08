@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblCurrentDateTime = new System.Windows.Forms.Label();
             this.btnAddInvoice = new System.Windows.Forms.Button();
             this.btnFirstPage = new System.Windows.Forms.Button();
@@ -36,6 +37,7 @@
             this.btnLastPage = new System.Windows.Forms.Button();
             this.lblCurrentPageInfo = new System.Windows.Forms.Label();
             this.dgvInvoiceList = new System.Windows.Forms.DataGridView();
+            this.tmrDateTime = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoiceList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,9 +50,8 @@
             this.lblCurrentDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lblCurrentDateTime.Location = new System.Drawing.Point(244, 20);
             this.lblCurrentDateTime.Name = "lblCurrentDateTime";
-            this.lblCurrentDateTime.Size = new System.Drawing.Size(129, 20);
+            this.lblCurrentDateTime.Size = new System.Drawing.Size(0, 20);
             this.lblCurrentDateTime.TabIndex = 0;
-            this.lblCurrentDateTime.Text = "PLACEHOLDER";
             this.lblCurrentDateTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnAddInvoice
@@ -120,6 +121,12 @@
             this.dgvInvoiceList.Size = new System.Drawing.Size(480, 280);
             this.dgvInvoiceList.TabIndex = 7;
             // 
+            // tmrDateTime
+            // 
+            this.tmrDateTime.Enabled = true;
+            this.tmrDateTime.Interval = 1000;
+            this.tmrDateTime.Tick += new System.EventHandler(this.tmrDateTime_Tick);
+            // 
             // BillTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,7 +140,6 @@
             this.Controls.Add(this.btnFirstPage);
             this.Controls.Add(this.btnAddInvoice);
             this.Controls.Add(this.lblCurrentDateTime);
-            this.Enabled = false;
             this.MaximizeBox = false;
             this.Name = "BillTracker";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -155,6 +161,7 @@
         private System.Windows.Forms.Button btnLastPage;
         private System.Windows.Forms.Label lblCurrentPageInfo;
         private System.Windows.Forms.DataGridView dgvInvoiceList;
+        private System.Windows.Forms.Timer tmrDateTime;
     }
 }
 

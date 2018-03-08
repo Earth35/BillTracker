@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TrackerLogic;
 
 namespace BillTracker
 {
@@ -15,6 +16,18 @@ namespace BillTracker
         public BillTracker()
         {
             InitializeComponent();
+
+            DisplayDateAndTime();
+        }
+
+        private void DisplayDateAndTime()
+        {
+            lblCurrentDateTime.Text = DateAndTime.GetCurrentDateAndTime();
+        }
+
+        private void tmrDateTime_Tick(object sender, EventArgs e)
+        {
+            DisplayDateAndTime();
         }
     }
 }

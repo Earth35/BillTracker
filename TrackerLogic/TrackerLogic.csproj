@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateAndTime.cs" />
     <Compile Include="Invoice.cs" />
     <Compile Include="DataEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
