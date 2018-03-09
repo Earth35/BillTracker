@@ -9,24 +9,24 @@ namespace TrackerLogic
 {
     public class Dataset : INotifyPropertyChanged
     {
-        private BindingList<Invoice> _invoiceList;
+        private BindingList<Invoice> _contents;
 
-        public BindingList<Invoice> InvoiceList
+        public BindingList<Invoice> Contents
         {
-            get { return _invoiceList; }
+            get { return _contents; }
             set
             {
-                _invoiceList = value;
+                _contents = value;
                 OnPropertyChanged("FullDataset");
             }
         }
 
         public Dataset ()
         {
-            InvoiceList = GenerateMockDataset();
+            Contents = GenerateMockDataset();
         }
 
-        // Generate mock dataset for testing
+        // Generate mock dataset for testing purposes
         public BindingList<Invoice> GenerateMockDataset ()
         {
             BindingList<Invoice> newSet = new BindingList<Invoice>();
@@ -41,7 +41,7 @@ namespace TrackerLogic
 
         public void UpdateEntry(Invoice entry)
         {
-            Invoice selectedEntry = InvoiceList.FirstOrDefault(i => i.InvoiceID == entry.InvoiceID);
+            Invoice selectedEntry = Contents.FirstOrDefault(i => i.InvoiceID == entry.InvoiceID);
             selectedEntry.Pay(DateTime.Now);
             OnPropertyChanged("FullDataset");
         }

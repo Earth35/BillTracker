@@ -25,7 +25,7 @@ namespace BillTracker
             DisplayDateAndTime();
             UpdateInvoiceList();
             AdjustButtonColumnCells();
-            dgvInvoiceList.DataSource = _mockDataset.InvoiceList;
+            dgvInvoiceList.DataSource = _mockDataset.Contents;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
         }
 
@@ -112,10 +112,10 @@ namespace BillTracker
 
         private void dgvInvoiceList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 8)
+            if (e.ColumnIndex == 8 && e.RowIndex >= 0)
             {
                 string invoiceID = (string)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
-                Invoice selectedInvoice = _mockDataset.InvoiceList.FirstOrDefault(i => i.InvoiceID == invoiceID);
+                Invoice selectedInvoice = _mockDataset.Contents.FirstOrDefault(i => i.InvoiceID == invoiceID);
                 if (!selectedInvoice.IsPaid)
                 {
                     _mockDataset.UpdateEntry(selectedInvoice);
