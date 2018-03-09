@@ -13,14 +13,20 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
-        private BindingList<Invoice> _mockDataset = new Dataset().FullDataset;
+        private Dataset _mockDataset;
 
         public BillTracker()
         {
             InitializeComponent();
 
+            _mockDataset = new Dataset();
+            _mockDataset.PropertyChanged += DatasetOnPropertyChanged;
+
             DisplayDateAndTime();
             UpdateInvoiceList();
+            AdjustButtonColumnCells();
+            dgvInvoiceList.DataSource = _mockDataset.InvoiceList;
+            dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
         }
 
         private void DisplayDateAndTime()
@@ -33,7 +39,6 @@ namespace BillTracker
             dgvInvoiceList.RowHeadersVisible = false;
             dgvInvoiceList.AutoGenerateColumns = false;
             dgvInvoiceList.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvInvoiceList.DataSource = _mockDataset;
 
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -90,6 +95,32 @@ namespace BillTracker
                 Width = 75,
                 DataPropertyName = "Status"
             });
+
+            dgvInvoiceList.Columns.Add(new DataGridViewButtonColumn
+            {
+                HeaderText = "Oznacz jako opłacona",
+                Width = 75,
+                Text = "\u2713",
+                UseColumnTextForButtonValue = true,
+            });
+        }
+
+        private void AdjustButtonColumnCells()
+        {
+            dgvInvoiceList.Columns[8].DefaultCellStyle.Padding = new Padding(25, 0, 25, 0);
+        }
+
+        private void dgvInvoiceList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 8)
+            {
+                string invoiceID = (string)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
+                Invoice selectedInvoice = _mockDataset.InvoiceList.FirstOrDefault(i => i.InvoiceID == invoiceID);
+                if (!selectedInvoice.IsPaid)
+                {
+                    _mockDataset.UpdateEntry(selectedInvoice);
+                }
+            }
         }
 
         private void tmrDateTime_Tick(object sender, EventArgs e)
@@ -97,6 +128,13 @@ namespace BillTracker
             DisplayDateAndTime();
         }
 
-
+        private void DatasetOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // obecnie zestaw danych zawiera wyłącznie jedną właściwość - jeśli to się nie zmieni, pomyśleć nad refaktoryzacją
+            if (e.PropertyName == "FullDataset")
+            {
+                dgvInvoiceList.Refresh();
+            }
+        }
     }
 }
