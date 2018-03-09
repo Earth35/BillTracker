@@ -38,14 +38,14 @@ namespace BillTracker
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Numer faktury",
-                Width = 150,
+                Width = 175,
                 DataPropertyName = "InvoiceID"
             });
 
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Wystawiona przez",
-                Width = 120,
+                Width = 145,
                 DataPropertyName = "IssuedBy"
             });
 
@@ -87,7 +87,7 @@ namespace BillTracker
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Opłacona?",
-                Width = 60,
+                Width = 75,
                 DataPropertyName = "Status"
             });
         }

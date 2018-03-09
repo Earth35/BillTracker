@@ -48,7 +48,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrentDateTime.AutoSize = true;
             this.lblCurrentDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblCurrentDateTime.Location = new System.Drawing.Point(244, 20);
+            this.lblCurrentDateTime.Location = new System.Drawing.Point(400, 20);
             this.lblCurrentDateTime.Name = "lblCurrentDateTime";
             this.lblCurrentDateTime.Size = new System.Drawing.Size(0, 20);
             this.lblCurrentDateTime.TabIndex = 0;
@@ -56,17 +56,17 @@
             // 
             // btnAddInvoice
             // 
-            this.btnAddInvoice.AutoSize = true;
-            this.btnAddInvoice.Location = new System.Drawing.Point(273, 399);
+            this.btnAddInvoice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnAddInvoice.Location = new System.Drawing.Point(319, 415);
             this.btnAddInvoice.Name = "btnAddInvoice";
-            this.btnAddInvoice.Size = new System.Drawing.Size(81, 23);
+            this.btnAddInvoice.Size = new System.Drawing.Size(248, 35);
             this.btnAddInvoice.TabIndex = 1;
             this.btnAddInvoice.Text = "Dodaj fakturę";
             this.btnAddInvoice.UseVisualStyleBackColor = true;
             // 
             // btnFirstPage
             // 
-            this.btnFirstPage.Location = new System.Drawing.Point(68, 355);
+            this.btnFirstPage.Location = new System.Drawing.Point(238, 365);
             this.btnFirstPage.Name = "btnFirstPage";
             this.btnFirstPage.Size = new System.Drawing.Size(75, 23);
             this.btnFirstPage.TabIndex = 2;
@@ -75,7 +75,7 @@
             // 
             // btnPreviousPage
             // 
-            this.btnPreviousPage.Location = new System.Drawing.Point(149, 355);
+            this.btnPreviousPage.Location = new System.Drawing.Point(319, 365);
             this.btnPreviousPage.Name = "btnPreviousPage";
             this.btnPreviousPage.Size = new System.Drawing.Size(75, 23);
             this.btnPreviousPage.TabIndex = 3;
@@ -84,7 +84,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(391, 355);
+            this.btnNextPage.Location = new System.Drawing.Point(492, 365);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 4;
@@ -93,7 +93,7 @@
             // 
             // btnLastPage
             // 
-            this.btnLastPage.Location = new System.Drawing.Point(472, 355);
+            this.btnLastPage.Location = new System.Drawing.Point(573, 365);
             this.btnLastPage.Name = "btnLastPage";
             this.btnLastPage.Size = new System.Drawing.Size(75, 23);
             this.btnLastPage.TabIndex = 5;
@@ -102,23 +102,24 @@
             // 
             // lblCurrentPageInfo
             // 
-            this.lblCurrentPageInfo.AutoSize = true;
-            this.lblCurrentPageInfo.Location = new System.Drawing.Point(270, 360);
+            this.lblCurrentPageInfo.Location = new System.Drawing.Point(400, 365);
             this.lblCurrentPageInfo.Name = "lblCurrentPageInfo";
-            this.lblCurrentPageInfo.Size = new System.Drawing.Size(86, 13);
+            this.lblCurrentPageInfo.Size = new System.Drawing.Size(86, 23);
             this.lblCurrentPageInfo.TabIndex = 6;
             this.lblCurrentPageInfo.Text = "PLACEHOLDER";
+            this.lblCurrentPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCurrentPageInfo.UseWaitCursor = true;
             // 
             // dgvInvoiceList
             // 
             this.dgvInvoiceList.AllowUserToAddRows = false;
             this.dgvInvoiceList.AllowUserToDeleteRows = false;
             this.dgvInvoiceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvInvoiceList.Location = new System.Drawing.Point(68, 55);
+            this.dgvInvoiceList.Location = new System.Drawing.Point(75, 55);
             this.dgvInvoiceList.Name = "dgvInvoiceList";
             this.dgvInvoiceList.ReadOnly = true;
             this.dgvInvoiceList.RowHeadersVisible = false;
-            this.dgvInvoiceList.Size = new System.Drawing.Size(480, 280);
+            this.dgvInvoiceList.Size = new System.Drawing.Size(750, 300);
             this.dgvInvoiceList.TabIndex = 7;
             // 
             // tmrDateTime
@@ -131,7 +132,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 462);
+            this.ClientSize = new System.Drawing.Size(894, 462);
             this.Controls.Add(this.dgvInvoiceList);
             this.Controls.Add(this.lblCurrentPageInfo);
             this.Controls.Add(this.btnLastPage);
