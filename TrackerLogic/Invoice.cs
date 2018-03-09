@@ -16,18 +16,38 @@ namespace TrackerLogic
         public DateTime PaidOn { get; set; }
         public double TotalAmountCharged { get; set; }
         public bool IsPaid { get; private set; }
+        public string Status { get; private set; }
 
-        public Invoice (string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate, DateTime paymentDueDate,
-            DateTime paidOn, double totalAmountCharged)
+        public Invoice (string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate,
+            DateTime paymentDueDate, double totalAmountCharged)
         {
             InvoiceID = invoiceID;
             IssuedBy = issuedBy;
             MonthYearSymbol = monthYearSymbol;
             IssueDate = issueDate;
             PaymentDueDate = paymentDueDate;
-            PaidOn = paidOn;
             TotalAmountCharged = totalAmountCharged;
             IsPaid = false;
+            SetStatus();
+        }
+
+        public void Pay(DateTime paymentDate)
+        {
+            PaidOn = paymentDate;
+            IsPaid = true;
+            SetStatus();
+        }
+
+        private void SetStatus()
+        {
+            if (!IsPaid)
+            {
+                Status = "";
+            }
+            else
+            {
+                Status = "Opłacona";
+            }
         }
     }
 }
