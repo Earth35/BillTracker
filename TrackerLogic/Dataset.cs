@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace TrackerLogic
 {
-    public class Dataset : INotifyPropertyChanged
+    public class Dataset
     {
         private BindingList<Invoice> _contents;
 
@@ -17,7 +17,6 @@ namespace TrackerLogic
             set
             {
                 _contents = value;
-                OnPropertyChanged("FullDataset");
             }
         }
 
@@ -37,20 +36,6 @@ namespace TrackerLogic
             }
 
             return newSet;
-        }
-
-        public void UpdateEntry(Invoice entry)
-        {
-            Invoice selectedEntry = Contents.FirstOrDefault(i => i.InvoiceID == entry.InvoiceID);
-            selectedEntry.Pay(DateTime.Now);
-            OnPropertyChanged("FullDataset");
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged (string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

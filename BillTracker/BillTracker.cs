@@ -20,7 +20,6 @@ namespace BillTracker
             InitializeComponent();
 
             _mockDataset = new Dataset();
-            _mockDataset.PropertyChanged += DatasetOnPropertyChanged;
 
             DisplayDateAndTime();
             UpdateInvoiceList();
@@ -102,6 +101,7 @@ namespace BillTracker
                 Width = 75,
                 Text = "\u2713",
                 UseColumnTextForButtonValue = true,
+                
             });
         }
 
@@ -116,9 +116,11 @@ namespace BillTracker
             {
                 string invoiceID = (string)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
                 Invoice selectedInvoice = _mockDataset.Contents.FirstOrDefault(i => i.InvoiceID == invoiceID);
+                selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
                 if (!selectedInvoice.IsPaid)
                 {
-                    _mockDataset.UpdateEntry(selectedInvoice);
+                    MarkingScreen markingScreen = new MarkingScreen(selectedInvoice);
+                    markingScreen.ShowDialog(this);
                 }
             }
         }
@@ -128,12 +130,13 @@ namespace BillTracker
             DisplayDateAndTime();
         }
 
-        private void DatasetOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // obecnie zestaw danych zawiera wyłącznie jedną właściwość - jeśli to się nie zmieni, pomyśleć nad refaktoryzacją
-            if (e.PropertyName == "FullDataset")
+            if (e.PropertyName == "Status")
             {
-                dgvInvoiceList.Refresh();
+                // reset DataSource
+                dgvInvoiceList.DataSource = typeof(BindingList<>);
+                dgvInvoiceList.DataSource = _mockDataset.Contents;
             }
         }
     }
