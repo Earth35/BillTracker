@@ -122,6 +122,30 @@ namespace BillTracker
                     MarkingScreen markingScreen = new MarkingScreen(selectedInvoice);
                     markingScreen.ShowDialog(this);
                 }
+                selectedInvoice.PropertyChanged -= InvoiceOnPropertyChanged;
+            }
+        }
+
+        private void HideCell (DataGridViewCell cell)
+        {
+            // padding = cell width + 1 workaround
+            DataGridViewCellStyle styleTypeHidden = new DataGridViewCellStyle();
+            styleTypeHidden.Padding = new Padding( cell.Size.Width + 1, 0, 0, 0);
+            cell.Style = styleTypeHidden;
+        }
+
+        private void HideObsoleteButtons ()
+        {
+            // search through the dataset by invoiceID, then hide buttons in rows where IsPaid property is true
+            foreach (DataGridViewRow row in dgvInvoiceList.Rows)
+            {
+                string invoiceID = row.Cells[0].Value as string;
+                
+                if (_mockDataset.Contents.First(i => i.InvoiceID == invoiceID).IsPaid)
+                {
+                    DataGridViewCell cellToHide = row.Cells[row.Cells.Count - 1];
+                    HideCell(cellToHide);
+                }
             }
         }
 
@@ -137,6 +161,7 @@ namespace BillTracker
                 // reset DataSource
                 dgvInvoiceList.DataSource = typeof(BindingList<>);
                 dgvInvoiceList.DataSource = _mockDataset.Contents;
+                HideObsoleteButtons();
             }
         }
     }
