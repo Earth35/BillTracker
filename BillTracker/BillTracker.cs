@@ -130,7 +130,7 @@ namespace BillTracker
         {
             // padding = cell width + 1 workaround
             DataGridViewCellStyle styleTypeHidden = new DataGridViewCellStyle();
-            styleTypeHidden.Padding = new Padding( cell.Size.Width + 1, 0, 0, 0);
+            styleTypeHidden.Padding = new Padding(cell.Size.Width + 1, 0, 0, 0);
             cell.Style = styleTypeHidden;
         }
 

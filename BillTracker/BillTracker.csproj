@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddingScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddingScreen.Designer.cs">
+      <DependentUpon>AddingScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="BillTracker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddingScreen.resx">
+      <DependentUpon>AddingScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BillTracker.resx">
       <DependentUpon>BillTracker.cs</DependentUpon>
     </EmbeddedResource>
