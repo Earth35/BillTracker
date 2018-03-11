@@ -164,5 +164,11 @@ namespace BillTracker
                 HideObsoleteButtons();
             }
         }
+
+        private void btnAddInvoice_Click(object sender, EventArgs e)
+        {
+            AddingScreen addingScreen = new AddingScreen(_mockDataset);
+            addingScreen.ShowDialog();
+        }
     }
 }

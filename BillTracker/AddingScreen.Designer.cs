@@ -183,14 +183,18 @@
             // calIssueDate
             // 
             this.calIssueDate.Location = new System.Drawing.Point(525, 78);
+            this.calIssueDate.MaxSelectionCount = 1;
             this.calIssueDate.Name = "calIssueDate";
             this.calIssueDate.TabIndex = 14;
+            this.calIssueDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.calIssueDate_DateChanged);
             // 
             // calPaymentDueDate
             // 
             this.calPaymentDueDate.Location = new System.Drawing.Point(525, 285);
+            this.calPaymentDueDate.MaxSelectionCount = 1;
             this.calPaymentDueDate.Name = "calPaymentDueDate";
             this.calPaymentDueDate.TabIndex = 15;
+            this.calPaymentDueDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.calPaymentDueDate_DateChanged);
             // 
             // lblSeparator
             // 
@@ -210,6 +214,7 @@
             this.btnCancel.TabIndex = 17;
             this.btnCancel.Text = "Anuluj";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSubmit
             // 
@@ -219,6 +224,7 @@
             this.btnSubmit.TabIndex = 18;
             this.btnSubmit.Text = "Zatwierdź";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // AddingScreen
             // 
@@ -245,6 +251,7 @@
             this.Controls.Add(this.lblInvoiceID);
             this.Controls.Add(this.lblTitle);
             this.Name = "AddingScreen";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Dodaj fakturę";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -63,6 +63,7 @@
             this.btnAddInvoice.TabIndex = 1;
             this.btnAddInvoice.Text = "Dodaj fakturę";
             this.btnAddInvoice.UseVisualStyleBackColor = true;
+            this.btnAddInvoice.Click += new System.EventHandler(this.btnAddInvoice_Click);
             // 
             // btnFirstPage
             // 
