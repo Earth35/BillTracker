@@ -30,25 +30,28 @@ namespace BillTracker
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            // TODO Sanitize input - make sure everything is valid and necessary fields weren't left empty
             if (!ValidateBasicInput())
             {
-                MessageBox.Show("BASIC", "BASIC", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             else if (!ValidateDates(tbIssueDate.Text, tbPaymentDueDate.Text))
             {
-                MessageBox.Show("DATES", "DATES", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Błędny format daty. Wybierz datę z kalendarza.", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             else if (!ValidateSymbolInput($"{tbMonthSymbol.Text}/{tbYearSymbol.Text}"))
             {
-                MessageBox.Show("SYMBOL", "SYMBOL", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Symbol musi być podany w formacie miesiąc/rok, np. 01/18.", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             else if (!ValidateAmountInput(tbTotalAmountCharged.Text))
             {
-                MessageBox.Show("AMOUNT", "AMOUNT", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Błędny format kwoty. Wprowadź poprawne dane.", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             // pass values and close the dialog
@@ -94,6 +97,13 @@ namespace BillTracker
         private void calPaymentDueDate_DateChanged(object sender, DateRangeEventArgs e)
         {
             SetTextboxContent(tbPaymentDueDate, calPaymentDueDate.SelectionStart);
+
+            if ((!String.IsNullOrWhiteSpace(tbPaymentDueDate.Text)) &&
+                (DateTime.Compare(calPaymentDueDate.SelectionStart, DateTime.Parse(tbIssueDate.Text)) < 0))
+            {
+                MessageBox.Show("Zaznaczono datę wcześniejszą niż data wystawienia faktury. Wybierz poprawny termin płatności.",
+                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         private void SetTextboxContent(TextBox textbox, DateTime date)
