@@ -96,13 +96,15 @@ namespace BillTracker
 
         private void calPaymentDueDate_DateChanged(object sender, DateRangeEventArgs e)
         {
-            SetTextboxContent(tbPaymentDueDate, calPaymentDueDate.SelectionStart);
-
             if ((!String.IsNullOrWhiteSpace(tbPaymentDueDate.Text)) &&
                 (DateTime.Compare(calPaymentDueDate.SelectionStart, DateTime.Parse(tbIssueDate.Text)) < 0))
             {
                 MessageBox.Show("Zaznaczono datę wcześniejszą niż data wystawienia faktury. Wybierz poprawny termin płatności.",
                     "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                SetTextboxContent(tbPaymentDueDate, calPaymentDueDate.SelectionStart);
             }
         }
 
