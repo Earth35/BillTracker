@@ -32,7 +32,7 @@ namespace TrackerLogic
 
             for (int n = 0; n < 100; n++)
             {
-                newSet.Insert(0, new Invoice($"Invoice_No. {n}", "Company X", "MM/YY", new DateTime(2018, 03, 09), new DateTime(2018, 03, 23), 99.99));
+                newSet.Insert(0, new Invoice($"Invoice_No. {n}", "Company X", "MM/YY", new DateTime(2018, 03, 09), new DateTime(2018, 03, 23), "99,99"));
             }
 
             return newSet;

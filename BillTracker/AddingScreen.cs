@@ -21,6 +21,13 @@ namespace BillTracker
         {
             InitializeComponent();
             _currentDataset = dataset;
+            SetDefaultDates();
+        }
+
+        private void SetDefaultDates()
+        {
+            tbIssueDate.Text = Clock.GetCurrentDate();
+            tbPaymentDueDate.Text = Clock.GetCurrentDate();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -30,6 +37,13 @@ namespace BillTracker
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
+            string invoiceID = tbInvoiceID.Text;
+            string issuedBy = tbIssuedBy.Text.ToUpper(); // convert to all-uppercase for standardization
+            string fullSymbol = $"{tbMonthSymbol.Text}/{tbYearSymbol.Text}"; // passed by reference for validation
+            DateTime issueDate = DateTime.Parse(tbIssueDate.Text);
+            DateTime paymentDueDate = DateTime.Parse(tbPaymentDueDate.Text);
+            string totalAmountCharged = tbTotalAmountCharged.Text; // also passed by reference for validation
+
             if (!ValidateBasicInput())
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd",
@@ -42,37 +56,23 @@ namespace BillTracker
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (!ValidateSymbolInput($"{tbMonthSymbol.Text}/{tbYearSymbol.Text}"))
+            else if (!ValidateSymbolInput(ref fullSymbol))
             {
                 MessageBox.Show("Symbol musi być podany w formacie miesiąc/rok, np. 01/18.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (!ValidateAmountInput(tbTotalAmountCharged.Text))
+            else if (!ValidateAmountInput(ref totalAmountCharged))
             {
                 MessageBox.Show("Błędny format kwoty. Wprowadź poprawne dane.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            // pass values and close the dialog
-            Close();
-            /*
             
-            // Pass invoice params and push invoice into the dataset
-            string invoiceId = tbInvoiceID.Text;
-            string issuedBy = tbIssuedBy.Text;
-            // TODO - sanitize the symbol
-            string symbol = tbMonthSymbol.Text + tbYearSymbol.Text;
-            // TODO - handle the time portion somewhere
-            DateTime issueDate = DateTime.Parse(tbIssueDate.Text);
-            DateTime paymentDueDate = DateTime.Parse(tbPaymentDueDate.Text);
-            // TODO - sanitize input, dot recognized as decimal separator, comma only serves as a "visual" separator;
-            // Also, round it to 2 decimal points
-            double totalAmountCharged = Double.Parse(tbTotalAmountCharged.Text, CultureInfo.InvariantCulture);
+            Invoice invoiceToAdd = new Invoice(invoiceID, issuedBy, fullSymbol, issueDate, paymentDueDate, totalAmountCharged);
+            _currentDataset.Contents.Insert(0, invoiceToAdd);
 
-            // create a new invoice and push it into the dataset
-            
-            */
+            Close();
         }
 
         private void calIssueDate_DateChanged(object sender, DateRangeEventArgs e)
@@ -141,14 +141,14 @@ namespace BillTracker
             return false;
         }
 
-        private bool ValidateSymbolInput (string symbolInput)
+        private bool ValidateSymbolInput (ref string symbolInput)
         {
             Regex symbolPatternValidFull = new Regex(@"^(0[1-9])|(1[0-2])/\d{2}$"); // 1-12 range for M(M), any 2-digit year
             Regex symbolPatternValidPartial = new Regex(@"^([1-9])/\d{2}$"); // 1-9 range for month variant
 
             if (symbolPatternValidPartial.IsMatch(symbolInput))
             {
-                tbMonthSymbol.Text = tbMonthSymbol.Text.Insert(0, "0");
+                symbolInput = symbolInput.Insert(0, "0");
                 return true;
             }
             else if (symbolPatternValidFull.IsMatch(symbolInput))
@@ -158,7 +158,7 @@ namespace BillTracker
             return false;
         }
 
-        private bool ValidateAmountInput (string amountInput)
+        private bool ValidateAmountInput (ref string amountInput)
         {
             Regex plnOnlyPattern = new Regex(@"^\d+$");
             Regex incompleteDecimalPattern = new Regex(@"^\d+(\.|,)\d$");
@@ -166,30 +166,30 @@ namespace BillTracker
 
             if (plnOnlyPattern.IsMatch(amountInput))
             {
-                tbTotalAmountCharged.Text += ",00";
+                amountInput += ",00";
                 return true;
             }
             else if (incompleteDecimalPattern.IsMatch(amountInput))
             {
-                ValidateDecimalSeparator(amountInput);
-                tbTotalAmountCharged.Text += "0";
+                ValidateDecimalSeparator(ref amountInput);
+                amountInput += "0";
                 return true;
             }
             else if (fullPattern.IsMatch(amountInput))
             {
-                ValidateDecimalSeparator(amountInput);
+                ValidateDecimalSeparator(ref amountInput);
                 return true;
             }
             return false;
         }
 
-        private void ValidateDecimalSeparator (string input)
+        private void ValidateDecimalSeparator (ref string input)
         {
             Regex pattern = new Regex(@"\.\d{1,2}$");
 
             if (pattern.IsMatch(input))
             {
-                tbTotalAmountCharged.Text.Replace(".", ",");
+                input.Replace(".", ",");
             }
         }
     }

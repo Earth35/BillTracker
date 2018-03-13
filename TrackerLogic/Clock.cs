@@ -8,9 +8,16 @@ namespace TrackerLogic
 {
     public static class Clock
     {
-       public static string GetCurrentDateAndTime()
+        static private DateTime _currentDateTime = DateTime.Now;
+
+        public static string GetCurrentDateAndTime()
         {
-            return DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+            return _currentDateTime.ToString("dd-MM-yyyy HH:mm");
+        }
+
+        public static string GetCurrentDate()
+        {
+            return _currentDateTime.ToShortDateString();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TrackerLogic
         public DateTime IssueDate { get; set; }
         public DateTime PaymentDueDate { get; set; }
         public DateTime PaidOn { get; set; }
-        public double TotalAmountCharged { get; set; }
+        public string TotalAmountCharged { get; set; }
         public bool IsPaid
         {
             get { return _isPaid; }
@@ -30,7 +30,7 @@ namespace TrackerLogic
         public string Status { get; private set; }
 
         public Invoice (string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate,
-            DateTime paymentDueDate, double totalAmountCharged)
+            DateTime paymentDueDate, string totalAmountCharged)
         {
             InvoiceID = invoiceID;
             IssuedBy = issuedBy;
