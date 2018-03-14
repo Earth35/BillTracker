@@ -13,18 +13,24 @@ namespace TrackerLogic
     {
         public BindingList<Invoice> Contents { get; set; }
 
+        private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\C#\BillTracker\DB\Database.mdf;Integrated Security=True;Connect Timeout=30";
+
         public Dataset()
         {
-            Contents = GenerateDataset();
+            Contents = LoadDataset();
         }
 
-        public BindingList<Invoice> GenerateDataset()
+        public BindingList<Invoice> LoadDataset()
         {
             BindingList<Invoice> newSet = new BindingList<Invoice>();
 
             try
             {
-
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    // logic
+                }
             }
             catch (Exception ex)
             {
@@ -32,6 +38,22 @@ namespace TrackerLogic
             }
 
             return newSet;
+        }
+
+        public void SaveDataset()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    // logic
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex}");
+            }
         }
     }
 }
