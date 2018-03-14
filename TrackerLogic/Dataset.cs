@@ -29,7 +29,36 @@ namespace TrackerLogic
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    // logic
+                    using (SqlCommand readDataCommand = connection.CreateCommand())
+                    {
+                        readDataCommand.CommandType = CommandType.Text;
+                        readDataCommand.CommandText = "SELECT * FROM InvoiceDataset";
+
+                        SqlDataReader dataReader = readDataCommand.ExecuteReader();
+
+                        if (dataReader.HasRows)
+                        {
+                            while (dataReader.Read())
+                            {
+                                string invoiceID = (string)dataReader["InvoiceID"];
+                                string issuedBy = (string)dataReader["IssuedBy"];
+                                string monthYearSymbol = (string)dataReader["MonthYearSymbol"];
+                                DateTime issueDate = (DateTime)dataReader["IssueDate"];
+                                DateTime paymentDueDate = (DateTime)dataReader["PaymentDueDate"];
+                                string totalAmountCharged = (string)dataReader["TotalAmountCharged"];
+
+                                Invoice currentInvoice = new Invoice(invoiceID, issuedBy,
+                                    monthYearSymbol, issueDate, paymentDueDate, totalAmountCharged);
+
+                                // IMPORTANT - THE DB MUST HANDLE INVOICE STATUS AS WELL (PAID OR NOT, PAYMENT DATA)
+                                // MODIFY THE DATABASE AND ADD NECESSARY CODE
+
+                                newSet.Insert(0, currentInvoice);
+                            }
+                        }
+                        dataReader.Close();
+                    }
+                    return newSet;
                 }
             }
             catch (Exception ex)
@@ -37,7 +66,7 @@ namespace TrackerLogic
                 Console.WriteLine($"Error: {ex}");
             }
 
-            return newSet;
+            return null;
         }
 
         public void SaveDataset()

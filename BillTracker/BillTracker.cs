@@ -13,18 +13,19 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
-        private Dataset _mockDataset;
+        private const int MARKING_BUTTON_COLUMN_INDEX = 8;
+        private Dataset _invoiceDataset;
 
         public BillTracker()
         {
             InitializeComponent();
 
-            _mockDataset = new Dataset();
+            _invoiceDataset = new Dataset();
 
             DisplayDateAndTime();
             UpdateInvoiceList();
             AdjustButtonColumnCells();
-            dgvInvoiceList.DataSource = _mockDataset.Contents;
+            dgvInvoiceList.DataSource = _invoiceDataset.Contents;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
         }
 
@@ -38,6 +39,14 @@ namespace BillTracker
             dgvInvoiceList.RowHeadersVisible = false;
             dgvInvoiceList.AutoGenerateColumns = false;
             dgvInvoiceList.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            /*
+            dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "InternalID",
+                Visible = false
+            });
+            */
 
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -107,15 +116,15 @@ namespace BillTracker
 
         private void AdjustButtonColumnCells()
         {
-            dgvInvoiceList.Columns[8].DefaultCellStyle.Padding = new Padding(25, 0, 25, 0);
+            dgvInvoiceList.Columns[MARKING_BUTTON_COLUMN_INDEX].DefaultCellStyle.Padding = new Padding(25, 0, 25, 0);
         }
 
         private void dgvInvoiceList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 8 && e.RowIndex >= 0)
+            if (e.ColumnIndex == MARKING_BUTTON_COLUMN_INDEX && e.RowIndex >= 0)
             {
                 string invoiceID = (string)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
-                Invoice selectedInvoice = _mockDataset.Contents.FirstOrDefault(i => i.InvoiceID == invoiceID);
+                Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InvoiceID == invoiceID);
                 selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
                 if (!selectedInvoice.IsPaid)
                 {
@@ -141,7 +150,7 @@ namespace BillTracker
             {
                 string invoiceID = row.Cells[0].Value as string;
                 
-                if (_mockDataset.Contents.First(i => i.InvoiceID == invoiceID).IsPaid)
+                if (_invoiceDataset.Contents.First(i => i.InvoiceID == invoiceID).IsPaid)
                 {
                     DataGridViewCell cellToHide = row.Cells[row.Cells.Count - 1];
                     HideCell(cellToHide);
@@ -160,14 +169,14 @@ namespace BillTracker
             {
                 // reset DataSource
                 dgvInvoiceList.DataSource = typeof(BindingList<>);
-                dgvInvoiceList.DataSource = _mockDataset.Contents;
+                dgvInvoiceList.DataSource = _invoiceDataset.Contents;
                 HideObsoleteButtons();
             }
         }
 
         private void btnAddInvoice_Click(object sender, EventArgs e)
         {
-            AddingScreen addingScreen = new AddingScreen(_mockDataset);
+            AddingScreen addingScreen = new AddingScreen(_invoiceDataset);
             addingScreen.ShowDialog();
         }
     }
