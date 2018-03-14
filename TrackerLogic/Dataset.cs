@@ -4,35 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace TrackerLogic
 {
     public class Dataset
     {
-        private BindingList<Invoice> _contents;
+        public BindingList<Invoice> Contents { get; set; }
 
-        public BindingList<Invoice> Contents
+        public Dataset()
         {
-            get { return _contents; }
-            set
-            {
-                _contents = value;
-            }
+            Contents = GenerateDataset();
         }
 
-        public Dataset ()
-        {
-            Contents = GenerateMockDataset();
-        }
-
-        // Generate mock dataset for testing purposes
-        public BindingList<Invoice> GenerateMockDataset ()
+        public BindingList<Invoice> GenerateDataset()
         {
             BindingList<Invoice> newSet = new BindingList<Invoice>();
 
-            for (int n = 0; n < 100; n++)
+            try
             {
-                newSet.Insert(0, new Invoice($"Invoice_No. {n}", "Company X", "MM/YY", new DateTime(2018, 03, 09), new DateTime(2018, 03, 23), "99,99"));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex}");
             }
 
             return newSet;
