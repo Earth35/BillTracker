@@ -27,6 +27,7 @@ namespace BillTracker
             AdjustButtonColumnCells();
             dgvInvoiceList.DataSource = _invoiceDataset.Contents;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
+            RefreshDataGridViewOnStartup();
         }
 
         private void DisplayDateAndTime()
@@ -146,9 +147,9 @@ namespace BillTracker
             // search through the dataset by invoiceID, then hide buttons in rows where IsPaid property is true
             foreach (DataGridViewRow row in dgvInvoiceList.Rows)
             {
-                string invoiceID = row.Cells[0].Value as string;
+                int internalID = (int)row.Cells[0].Value;
                 
-                if (_invoiceDataset.Contents.First(i => i.InvoiceID == invoiceID).IsPaid)
+                if (_invoiceDataset.Contents.First(i => i.InternalID == internalID).IsPaid)
                 {
                     DataGridViewCell cellToHide = row.Cells[row.Cells.Count - 1];
                     HideCell(cellToHide);
@@ -182,6 +183,11 @@ namespace BillTracker
             Console.WriteLine(lastID);
             AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
+        }
+
+        private void RefreshDataGridViewOnStartup()
+        {
+            Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(task => HideObsoleteButtons());
         }
     }
 }
