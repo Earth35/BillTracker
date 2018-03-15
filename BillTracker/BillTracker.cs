@@ -13,7 +13,7 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
-        private const int MARKING_BUTTON_COLUMN_INDEX = 8;
+        private const int MARKING_BUTTON_COLUMN_INDEX = 9;
         private Dataset _invoiceDataset;
 
         public BillTracker()
@@ -40,13 +40,11 @@ namespace BillTracker
             dgvInvoiceList.AutoGenerateColumns = false;
             dgvInvoiceList.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            /*
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "InternalID",
                 Visible = false
             });
-            */
 
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -110,7 +108,7 @@ namespace BillTracker
                 Width = 75,
                 Text = "\u2713",
                 UseColumnTextForButtonValue = true,
-                
+                                
             });
         }
 
@@ -123,8 +121,8 @@ namespace BillTracker
         {
             if (e.ColumnIndex == MARKING_BUTTON_COLUMN_INDEX && e.RowIndex >= 0)
             {
-                string invoiceID = (string)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
-                Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InvoiceID == invoiceID);
+                int internalID = (int)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
+                Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InternalID == internalID);
                 selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
                 if (!selectedInvoice.IsPaid)
                 {
@@ -167,16 +165,22 @@ namespace BillTracker
         {
             if (e.PropertyName == "Status")
             {
-                // reset DataSource
-                dgvInvoiceList.DataSource = typeof(BindingList<>);
-                dgvInvoiceList.DataSource = _invoiceDataset.Contents;
+                ResetDatasource();
                 HideObsoleteButtons();
             }
         }
 
+        private void ResetDatasource ()
+        {
+            dgvInvoiceList.DataSource = typeof(BindingList<>);
+            dgvInvoiceList.DataSource = _invoiceDataset.Contents;
+        }
+
         private void btnAddInvoice_Click(object sender, EventArgs e)
         {
-            AddingScreen addingScreen = new AddingScreen(_invoiceDataset);
+            int lastID = (int)dgvInvoiceList.Rows[0].Cells[0].Value; // first row always contains the latest invoice
+            Console.WriteLine(lastID);
+            AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
         }
     }

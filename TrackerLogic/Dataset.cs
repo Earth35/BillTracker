@@ -40,18 +40,22 @@ namespace TrackerLogic
                         {
                             while (dataReader.Read())
                             {
+                                int internalID = (int)dataReader["Id"];
                                 string invoiceID = (string)dataReader["InvoiceID"];
                                 string issuedBy = (string)dataReader["IssuedBy"];
                                 string monthYearSymbol = (string)dataReader["MonthYearSymbol"];
                                 DateTime issueDate = (DateTime)dataReader["IssueDate"];
                                 DateTime paymentDueDate = (DateTime)dataReader["PaymentDueDate"];
                                 string totalAmountCharged = (string)dataReader["TotalAmountCharged"];
+                                var paymentDate = dataReader["PaymentDate"];
 
-                                Invoice currentInvoice = new Invoice(invoiceID, issuedBy,
+                                Invoice currentInvoice = new Invoice(internalID, invoiceID, issuedBy,
                                     monthYearSymbol, issueDate, paymentDueDate, totalAmountCharged);
 
-                                // IMPORTANT - THE DB MUST HANDLE INVOICE STATUS AS WELL (PAID OR NOT, PAYMENT DATA)
-                                // MODIFY THE DATABASE AND ADD NECESSARY CODE
+                                if (paymentDate != DBNull.Value)
+                                {
+                                    currentInvoice.Pay(Convert.ToDateTime(paymentDate));
+                                }
 
                                 newSet.Insert(0, currentInvoice);
                             }

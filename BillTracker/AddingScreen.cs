@@ -16,11 +16,13 @@ namespace BillTracker
     public partial class AddingScreen : Form
     {
         private Dataset _currentDataset;
+        private int _lastID;
 
-        public AddingScreen(Dataset dataset)
+        public AddingScreen(Dataset dataset, int lastID)
         {
             InitializeComponent();
             _currentDataset = dataset;
+            _lastID = lastID;
             SetDefaultDates();
         }
 
@@ -69,7 +71,7 @@ namespace BillTracker
                 return;
             }
             
-            Invoice invoiceToAdd = new Invoice(invoiceID, issuedBy, fullSymbol, issueDate, paymentDueDate, totalAmountCharged);
+            Invoice invoiceToAdd = new Invoice(_lastID + 1, invoiceID, issuedBy, fullSymbol, issueDate, paymentDueDate, totalAmountCharged);
             _currentDataset.Contents.Insert(0, invoiceToAdd);
 
             Close();

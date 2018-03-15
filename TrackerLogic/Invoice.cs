@@ -11,6 +11,7 @@ namespace TrackerLogic
     {
         private bool _isPaid;
 
+        public int InternalID { get; set; }
         public string InvoiceID { get; set; }
         public string IssuedBy { get; set; }
         public string MonthYearSymbol { get; set; }
@@ -29,9 +30,10 @@ namespace TrackerLogic
         }
         public string Status { get; private set; }
 
-        public Invoice (string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate,
+        public Invoice (int internalID, string invoiceID, string issuedBy, string monthYearSymbol, DateTime issueDate,
             DateTime paymentDueDate, string totalAmountCharged)
         {
+            InternalID = internalID;
             InvoiceID = invoiceID;
             IssuedBy = issuedBy;
             MonthYearSymbol = monthYearSymbol;
