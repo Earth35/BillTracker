@@ -27,7 +27,7 @@ namespace BillTracker
             AdjustButtonColumnCells();
             dgvInvoiceList.DataSource = _invoiceDataset.Contents;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
-            RefreshDataGridViewOnStartup();
+            RefreshInvoiceListOnStartup();
         }
 
         private void DisplayDateAndTime()
@@ -179,15 +179,27 @@ namespace BillTracker
 
         private void btnAddInvoice_Click(object sender, EventArgs e)
         {
-            int lastID = (int)dgvInvoiceList.Rows[0].Cells[0].Value; // first row always contains the latest invoice
-            Console.WriteLine(lastID);
+            int lastID;
+            if (dgvInvoiceList.Rows.Count != 0)
+            {
+                lastID = (int)dgvInvoiceList.Rows[0].Cells[0].Value;
+            }
+            else
+            {
+                lastID = 0; // first row always contains the latest invoice
+            }
             AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
         }
 
-        private void RefreshDataGridViewOnStartup()
+        private void RefreshInvoiceListOnStartup()
         {
             Task.Delay(TimeSpan.FromMilliseconds(1000)).ContinueWith(task => HideObsoleteButtons());
+        }
+
+        private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _invoiceDataset.SaveDataset();
         }
     }
 }

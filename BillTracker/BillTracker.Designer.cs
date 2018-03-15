@@ -147,6 +147,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Organizer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BillTracker_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoiceList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace TrackerLogic
 {
@@ -20,7 +21,7 @@ namespace TrackerLogic
             Contents = LoadDataset();
         }
 
-        public BindingList<Invoice> LoadDataset()
+        private BindingList<Invoice> LoadDataset()
         {
             BindingList<Invoice> newSet = new BindingList<Invoice>();
 
@@ -77,10 +78,69 @@ namespace TrackerLogic
         {
             try
             {
+                // re-populate the database with updated data
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    // logic
+
+                    // delete existing rows
+                    using (SqlCommand eraseDataCommand = connection.CreateCommand())
+                    {
+                        eraseDataCommand.CommandType = CommandType.Text;
+                        eraseDataCommand.CommandText = "DELETE FROM InvoiceDataset";
+
+                        eraseDataCommand.ExecuteNonQuery();
+                    }
+                    // reset IDs in the database
+                    using (SqlCommand reseedCommand = connection.CreateCommand())
+                    {
+                        reseedCommand.CommandType = CommandType.Text;
+                        reseedCommand.CommandText = "DBCC CHECKIDENT ('dbo.InvoiceDataset', RESEED, 0)";
+
+                        reseedCommand.ExecuteNonQuery();
+                    }
+
+                    // insert updated entries
+                    // entries are currently in the "from latest to oldest" order
+                    // when re-inserted like this, the list will be in reverse order upon loading entries from the database
+                    foreach (Invoice invoice in Contents.Reverse())
+                    {
+                        using (SqlCommand writeDataCommand = connection.CreateCommand())
+                        {
+                            writeDataCommand.CommandType = CommandType.Text;
+                            writeDataCommand.CommandText =
+                                "INSERT INTO InvoiceDataset " +
+                                "(InvoiceId, IssuedBy, MonthYearSymbol, IssueDate, PaymentDueDate, TotalAmountCharged, PaymentDate) " +
+                                "VALUES " +
+                                "(@InvoiceId, @IssuedBy, @MonthYearSymbol, @IssueDate, @PaymentDueDate, @TotalAmountCharged, @PaymentDate)";
+
+                            writeDataCommand.Parameters.Add("@InvoiceId", SqlDbType.Text);
+                            writeDataCommand.Parameters["@InvoiceId"].Value = invoice.InvoiceID;
+                            writeDataCommand.Parameters.Add("@IssuedBy", SqlDbType.VarChar);
+                            writeDataCommand.Parameters["@IssuedBy"].Value = invoice.IssuedBy;
+                            writeDataCommand.Parameters.Add("@MonthYearSymbol", SqlDbType.Char);
+                            writeDataCommand.Parameters["@MonthYearSymbol"].Value = invoice.MonthYearSymbol;
+                            writeDataCommand.Parameters.Add("@IssueDate", SqlDbType.Date);
+                            writeDataCommand.Parameters["@IssueDate"].Value = invoice.IssueDate;
+                            writeDataCommand.Parameters.Add("@PaymentDueDate", SqlDbType.Date);
+                            writeDataCommand.Parameters["@PaymentDueDate"].Value = invoice.PaymentDueDate;
+                            writeDataCommand.Parameters.Add("@TotalAmountCharged", SqlDbType.VarChar);
+                            writeDataCommand.Parameters["@TotalAmountCharged"].Value = invoice.TotalAmountCharged;
+                            writeDataCommand.Parameters.Add("@PaymentDate", SqlDbType.Date);
+
+                            // Prevent default date/time value from being inserted into the database instead of NULL
+                            if (invoice.PaidOn == Convert.ToDateTime("0001-01-01 00:00:00"))
+                            {
+                                writeDataCommand.Parameters["@PaymentDate"].Value = SqlDateTime.Null;
+                            }
+                            else
+                            {
+                                writeDataCommand.Parameters["@PaymentDate"].Value = invoice.PaidOn;
+                            }
+                            
+                            writeDataCommand.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
