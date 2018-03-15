@@ -187,7 +187,7 @@ namespace BillTracker
 
         private void RefreshDataGridViewOnStartup()
         {
-            Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(task => HideObsoleteButtons());
+            Task.Delay(TimeSpan.FromMilliseconds(1000)).ContinueWith(task => HideObsoleteButtons());
         }
     }
 }
