@@ -35,9 +35,10 @@
             this.btnPreviousPage = new System.Windows.Forms.Button();
             this.btnNextPage = new System.Windows.Forms.Button();
             this.btnLastPage = new System.Windows.Forms.Button();
-            this.lblCurrentPageInfo = new System.Windows.Forms.Label();
             this.dgvInvoiceList = new System.Windows.Forms.DataGridView();
             this.tmrDateTime = new System.Windows.Forms.Timer(this.components);
+            this.lblNumberOfPages = new System.Windows.Forms.Label();
+            this.tbCurrentPage = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoiceList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,7 @@
             // btnAddInvoice
             // 
             this.btnAddInvoice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnAddInvoice.Location = new System.Drawing.Point(319, 415);
+            this.btnAddInvoice.Location = new System.Drawing.Point(319, 605);
             this.btnAddInvoice.Name = "btnAddInvoice";
             this.btnAddInvoice.Size = new System.Drawing.Size(248, 35);
             this.btnAddInvoice.TabIndex = 1;
@@ -67,49 +68,43 @@
             // 
             // btnFirstPage
             // 
-            this.btnFirstPage.Location = new System.Drawing.Point(238, 365);
+            this.btnFirstPage.Location = new System.Drawing.Point(238, 565);
             this.btnFirstPage.Name = "btnFirstPage";
             this.btnFirstPage.Size = new System.Drawing.Size(75, 23);
             this.btnFirstPage.TabIndex = 2;
             this.btnFirstPage.Text = "<<";
             this.btnFirstPage.UseVisualStyleBackColor = true;
+            this.btnFirstPage.Click += new System.EventHandler(this.btnFirstPage_Click);
             // 
             // btnPreviousPage
             // 
-            this.btnPreviousPage.Location = new System.Drawing.Point(319, 365);
+            this.btnPreviousPage.Location = new System.Drawing.Point(319, 565);
             this.btnPreviousPage.Name = "btnPreviousPage";
             this.btnPreviousPage.Size = new System.Drawing.Size(75, 23);
             this.btnPreviousPage.TabIndex = 3;
             this.btnPreviousPage.Text = "<";
             this.btnPreviousPage.UseVisualStyleBackColor = true;
+            this.btnPreviousPage.Click += new System.EventHandler(this.btnPreviousPage_Click);
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(492, 365);
+            this.btnNextPage.Location = new System.Drawing.Point(492, 565);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 4;
             this.btnNextPage.Text = ">";
             this.btnNextPage.UseVisualStyleBackColor = true;
+            this.btnNextPage.Click += new System.EventHandler(this.btnNextPage_Click);
             // 
             // btnLastPage
             // 
-            this.btnLastPage.Location = new System.Drawing.Point(573, 365);
+            this.btnLastPage.Location = new System.Drawing.Point(573, 565);
             this.btnLastPage.Name = "btnLastPage";
             this.btnLastPage.Size = new System.Drawing.Size(75, 23);
             this.btnLastPage.TabIndex = 5;
             this.btnLastPage.Text = ">>";
             this.btnLastPage.UseVisualStyleBackColor = true;
-            // 
-            // lblCurrentPageInfo
-            // 
-            this.lblCurrentPageInfo.Location = new System.Drawing.Point(400, 365);
-            this.lblCurrentPageInfo.Name = "lblCurrentPageInfo";
-            this.lblCurrentPageInfo.Size = new System.Drawing.Size(86, 23);
-            this.lblCurrentPageInfo.TabIndex = 6;
-            this.lblCurrentPageInfo.Text = "PLACEHOLDER";
-            this.lblCurrentPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblCurrentPageInfo.UseWaitCursor = true;
+            this.btnLastPage.Click += new System.EventHandler(this.btnLastPage_Click);
             // 
             // dgvInvoiceList
             // 
@@ -120,7 +115,7 @@
             this.dgvInvoiceList.Name = "dgvInvoiceList";
             this.dgvInvoiceList.ReadOnly = true;
             this.dgvInvoiceList.RowHeadersVisible = false;
-            this.dgvInvoiceList.Size = new System.Drawing.Size(750, 300);
+            this.dgvInvoiceList.Size = new System.Drawing.Size(732, 493);
             this.dgvInvoiceList.TabIndex = 7;
             // 
             // tmrDateTime
@@ -129,13 +124,37 @@
             this.tmrDateTime.Interval = 1000;
             this.tmrDateTime.Tick += new System.EventHandler(this.tmrDateTime_Tick);
             // 
+            // lblNumberOfPages
+            // 
+            this.lblNumberOfPages.AutoSize = true;
+            this.lblNumberOfPages.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblNumberOfPages.Location = new System.Drawing.Point(453, 570);
+            this.lblNumberOfPages.Name = "lblNumberOfPages";
+            this.lblNumberOfPages.Size = new System.Drawing.Size(0, 15);
+            this.lblNumberOfPages.TabIndex = 8;
+            this.lblNumberOfPages.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbCurrentPage
+            // 
+            this.tbCurrentPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tbCurrentPage.Location = new System.Drawing.Point(404, 567);
+            this.tbCurrentPage.Margin = new System.Windows.Forms.Padding(0);
+            this.tbCurrentPage.MaxLength = 4;
+            this.tbCurrentPage.Name = "tbCurrentPage";
+            this.tbCurrentPage.Size = new System.Drawing.Size(46, 21);
+            this.tbCurrentPage.TabIndex = 9;
+            this.tbCurrentPage.Text = "1";
+            this.tbCurrentPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbCurrentPage.TextChanged += new System.EventHandler(this.tbCurrentPage_TextChanged);
+            // 
             // BillTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 462);
+            this.ClientSize = new System.Drawing.Size(884, 662);
+            this.Controls.Add(this.tbCurrentPage);
+            this.Controls.Add(this.lblNumberOfPages);
             this.Controls.Add(this.dgvInvoiceList);
-            this.Controls.Add(this.lblCurrentPageInfo);
             this.Controls.Add(this.btnLastPage);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPreviousPage);
@@ -162,9 +181,10 @@
         private System.Windows.Forms.Button btnPreviousPage;
         private System.Windows.Forms.Button btnNextPage;
         private System.Windows.Forms.Button btnLastPage;
-        private System.Windows.Forms.Label lblCurrentPageInfo;
         private System.Windows.Forms.DataGridView dgvInvoiceList;
         private System.Windows.Forms.Timer tmrDateTime;
+        private System.Windows.Forms.Label lblNumberOfPages;
+        private System.Windows.Forms.TextBox tbCurrentPage;
     }
 }
 

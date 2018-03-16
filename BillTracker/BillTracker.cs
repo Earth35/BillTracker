@@ -14,7 +14,15 @@ namespace BillTracker
     public partial class BillTracker : Form
     {
         private const int MARKING_BUTTON_COLUMN_INDEX = 9;
+        private const int NUMBER_OF_RECORDS_PER_PAGE = 20;
         private Dataset _invoiceDataset;
+        // pagination
+        private int _currentDatasetSize;
+        private int _numberOfPages;
+        private int _currentPage = 0;
+        private int _lastPageIndex;
+        private List<BindingList<Invoice>> _subsetsOfData = new List<BindingList<Invoice>>();
+        private BindingList<Invoice> _currentSubset = new BindingList<Invoice>();
 
         public BillTracker()
         {
@@ -25,9 +33,10 @@ namespace BillTracker
             DisplayDateAndTime();
             UpdateInvoiceList();
             AdjustButtonColumnCells();
-            dgvInvoiceList.DataSource = _invoiceDataset.Contents;
+            AddPagination();
+            dgvInvoiceList.DataSource = _currentSubset;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
-            RefreshInvoiceListOnStartup();
+            DelayedInvoiceListRefresh();
         }
 
         private void DisplayDateAndTime()
@@ -149,7 +158,7 @@ namespace BillTracker
             {
                 int internalID = (int)row.Cells[0].Value;
                 
-                if (_invoiceDataset.Contents.First(i => i.InternalID == internalID).IsPaid)
+                if (_currentSubset.First(i => i.InternalID == internalID).IsPaid)
                 {
                     DataGridViewCell cellToHide = row.Cells[row.Cells.Count - 1];
                     HideCell(cellToHide);
@@ -174,7 +183,7 @@ namespace BillTracker
         private void ResetDatasource ()
         {
             dgvInvoiceList.DataSource = typeof(BindingList<>);
-            dgvInvoiceList.DataSource = _invoiceDataset.Contents;
+            dgvInvoiceList.DataSource = _currentSubset;
         }
 
         private void btnAddInvoice_Click(object sender, EventArgs e)
@@ -190,16 +199,148 @@ namespace BillTracker
             }
             AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
+            AddPagination();
+            _currentPage = 0;
+            SetCurrentSubset();
         }
 
-        private void RefreshInvoiceListOnStartup()
+        private void DelayedInvoiceListRefresh()
         {
-            Task.Delay(TimeSpan.FromMilliseconds(1000)).ContinueWith(task => HideObsoleteButtons());
+            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
         }
 
         private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
         {
             _invoiceDataset.SaveDataset();
+        }
+
+        private void AddPagination()
+        {
+            _subsetsOfData.Clear();
+            _currentDatasetSize = _invoiceDataset.Contents.Count();
+            if (_currentDatasetSize == 0)
+            {
+                _numberOfPages = 1;
+            }
+            else
+            {
+                if (_currentDatasetSize % NUMBER_OF_RECORDS_PER_PAGE == 0)
+                {
+                    _numberOfPages = _currentDatasetSize / NUMBER_OF_RECORDS_PER_PAGE;
+                }
+                else
+                {
+                    _numberOfPages = (_currentDatasetSize / NUMBER_OF_RECORDS_PER_PAGE) + 1;
+                }
+            }
+            _lastPageIndex = _numberOfPages - 1;
+
+            for (int n = 0; n < _numberOfPages; n++)
+            {
+                List<Invoice> currentSubset =
+                    _invoiceDataset.Contents.Skip(n * NUMBER_OF_RECORDS_PER_PAGE).Take(NUMBER_OF_RECORDS_PER_PAGE).ToList();
+                BindingList<Invoice> bindingSubset = new BindingList<Invoice>(currentSubset);
+
+                _subsetsOfData.Add(bindingSubset);
+            }
+            if (_currentDatasetSize > 0)
+            {
+                SetCurrentSubset();
+            }
+            SetVisibilityOfPagingControls();
+        }
+
+        private void SetCurrentSubset ()
+        {
+            _currentSubset = _subsetsOfData[_currentPage];
+            tbCurrentPage.Text = (_currentPage + 1).ToString();
+            ResetDatasource();
+        }
+
+        private void SetVisibilityOfPagingControls()
+        {
+            lblNumberOfPages.Text = $"/ {_numberOfPages.ToString()}";
+
+            if (_currentDatasetSize == 0 || (_currentPage == 0 && _currentPage == _lastPageIndex))
+            {
+                btnFirstPage.Visible = false;
+                btnPreviousPage.Visible = false;
+                btnNextPage.Visible = false;
+                btnLastPage.Visible = false;
+            }
+            else if (_currentPage == 0)
+            {
+                btnFirstPage.Visible = false;
+                btnPreviousPage.Visible = false;
+                btnNextPage.Visible = true;
+                btnLastPage.Visible = true;
+            }
+            else if (_currentPage == _lastPageIndex)
+            {
+                btnFirstPage.Visible = true;
+                btnPreviousPage.Visible = true;
+                btnNextPage.Visible = false;
+                btnLastPage.Visible = false;
+            }
+            else
+            {
+                btnFirstPage.Visible = true;
+                btnPreviousPage.Visible = true;
+                btnNextPage.Visible = true;
+                btnLastPage.Visible = true;
+            }
+        }
+
+        private void RefreshPagingControls()
+        {
+            SetCurrentSubset();
+            SetVisibilityOfPagingControls();
+            DelayedInvoiceListRefresh();
+        }
+
+        private void btnFirstPage_Click(object sender, EventArgs e)
+        {
+            _currentPage = 0;
+            RefreshPagingControls();
+        }
+
+        private void btnPreviousPage_Click(object sender, EventArgs e)
+        {
+            _currentPage -= 1;
+            if (_currentPage < 0) { _currentPage = 0; } // guard clause
+            RefreshPagingControls();
+        }
+
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            _currentPage++;
+            if (_currentPage > _lastPageIndex) { _currentPage = _lastPageIndex; } // guard clause
+            RefreshPagingControls();
+        }
+
+        private void btnLastPage_Click(object sender, EventArgs e)
+        {
+            _currentPage = _lastPageIndex;
+            RefreshPagingControls();
+        }
+
+        private void tbCurrentPage_TextChanged(object sender, EventArgs e)
+        {
+            int readPage = 0;
+
+            if (int.TryParse(tbCurrentPage.Text, out readPage))
+            {
+                readPage--;
+                if (readPage >= 0 && readPage <= _lastPageIndex)
+                {
+                    _currentPage = readPage;
+                    RefreshPagingControls();
+                }
+                else
+                {
+                    MessageBox.Show("Wskazana strona nie istnieje.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
         }
     }
 }
