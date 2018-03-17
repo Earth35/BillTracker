@@ -130,7 +130,9 @@ namespace BillTracker
                 HeaderText = "Usuń",
                 Width = 32,
                 TrueValue = true,
-                FalseValue = false
+                FalseValue = null,
+                IndeterminateValue = null
+                
             });
         }
 
@@ -228,9 +230,7 @@ namespace BillTracker
             }
             AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
-            AddPagination();
-            _currentPage = 0;
-            SetCurrentSubset();
+            ResetPagination();
         }
 
         private void DelayedInvoiceListRefresh()
@@ -284,6 +284,13 @@ namespace BillTracker
             _currentSubset = _subsetsOfData[_currentPage];
             tbCurrentPage.Text = (_currentPage + 1).ToString();
             ResetDatasource();
+        }
+
+        private void ResetPagination()
+        {
+            AddPagination();
+            _currentPage = 0;
+            SetCurrentSubset();
         }
 
         private void SetVisibilityOfPagingControls()
@@ -375,6 +382,29 @@ namespace BillTracker
                 {
                     MessageBox.Show("Wskazana strona nie istnieje.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
+            }
+        }
+
+        private void btnDeleteSelected_Click(object sender, EventArgs e)
+        {
+            DialogResult choice = MessageBox.Show($"Czy na pewno chcesz usunąć zaznaczone faktury ({_numberOfSelectedInvoices})?",
+                "Usuwanie zaznaczonych pozycji", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (choice == DialogResult.Yes)
+            {
+                int numberOfDgvRows = dgvInvoiceList.RowCount;
+                for (int n=0; n<numberOfDgvRows; n++)
+                {
+                    var markedForDeletion = dgvInvoiceList.Rows[n].Cells[MARKING_FOR_DELETION_COLUMN_INDEX].Value;
+                    if (markedForDeletion != null)
+                    {
+                        int currentID = (int)dgvInvoiceList.Rows[n].Cells[ID_COLUMN_INDEX].Value;
+                        Invoice invoiceToDelete = _invoiceDataset.Contents.First(i => i.InternalID == currentID);
+                        _invoiceDataset.Contents.Remove(invoiceToDelete);
+                    }
+                }
+
+                ResetPagination();
             }
         }
     }

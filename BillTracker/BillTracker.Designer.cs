@@ -50,7 +50,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrentDateTime.AutoSize = true;
             this.lblCurrentDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblCurrentDateTime.Location = new System.Drawing.Point(400, 20);
+            this.lblCurrentDateTime.Location = new System.Drawing.Point(435, 9);
             this.lblCurrentDateTime.Name = "lblCurrentDateTime";
             this.lblCurrentDateTime.Size = new System.Drawing.Size(0, 20);
             this.lblCurrentDateTime.TabIndex = 0;
@@ -59,9 +59,9 @@
             // btnAddInvoice
             // 
             this.btnAddInvoice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnAddInvoice.Location = new System.Drawing.Point(319, 605);
+            this.btnAddInvoice.Location = new System.Drawing.Point(376, 553);
             this.btnAddInvoice.Name = "btnAddInvoice";
-            this.btnAddInvoice.Size = new System.Drawing.Size(248, 35);
+            this.btnAddInvoice.Size = new System.Drawing.Size(239, 35);
             this.btnAddInvoice.TabIndex = 1;
             this.btnAddInvoice.Text = "Dodaj fakturę";
             this.btnAddInvoice.UseVisualStyleBackColor = true;
@@ -69,7 +69,7 @@
             // 
             // btnFirstPage
             // 
-            this.btnFirstPage.Location = new System.Drawing.Point(238, 565);
+            this.btnFirstPage.Location = new System.Drawing.Point(221, 514);
             this.btnFirstPage.Name = "btnFirstPage";
             this.btnFirstPage.Size = new System.Drawing.Size(75, 23);
             this.btnFirstPage.TabIndex = 2;
@@ -79,7 +79,7 @@
             // 
             // btnPreviousPage
             // 
-            this.btnPreviousPage.Location = new System.Drawing.Point(319, 565);
+            this.btnPreviousPage.Location = new System.Drawing.Point(302, 514);
             this.btnPreviousPage.Name = "btnPreviousPage";
             this.btnPreviousPage.Size = new System.Drawing.Size(75, 23);
             this.btnPreviousPage.TabIndex = 3;
@@ -89,7 +89,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(492, 565);
+            this.btnNextPage.Location = new System.Drawing.Point(613, 514);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 4;
@@ -99,7 +99,7 @@
             // 
             // btnLastPage
             // 
-            this.btnLastPage.Location = new System.Drawing.Point(573, 565);
+            this.btnLastPage.Location = new System.Drawing.Point(694, 514);
             this.btnLastPage.Name = "btnLastPage";
             this.btnLastPage.Size = new System.Drawing.Size(75, 23);
             this.btnLastPage.TabIndex = 5;
@@ -112,11 +112,11 @@
             this.dgvInvoiceList.AllowUserToAddRows = false;
             this.dgvInvoiceList.AllowUserToDeleteRows = false;
             this.dgvInvoiceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvInvoiceList.Location = new System.Drawing.Point(75, 55);
+            this.dgvInvoiceList.Location = new System.Drawing.Point(75, 32);
             this.dgvInvoiceList.Name = "dgvInvoiceList";
             this.dgvInvoiceList.ReadOnly = true;
             this.dgvInvoiceList.RowHeadersVisible = false;
-            this.dgvInvoiceList.Size = new System.Drawing.Size(732, 493);
+            this.dgvInvoiceList.Size = new System.Drawing.Size(840, 476);
             this.dgvInvoiceList.TabIndex = 7;
             // 
             // tmrDateTime
@@ -129,7 +129,7 @@
             // 
             this.lblNumberOfPages.AutoSize = true;
             this.lblNumberOfPages.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblNumberOfPages.Location = new System.Drawing.Point(453, 570);
+            this.lblNumberOfPages.Location = new System.Drawing.Point(493, 517);
             this.lblNumberOfPages.Name = "lblNumberOfPages";
             this.lblNumberOfPages.Size = new System.Drawing.Size(0, 15);
             this.lblNumberOfPages.TabIndex = 8;
@@ -138,7 +138,7 @@
             // tbCurrentPage
             // 
             this.tbCurrentPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.tbCurrentPage.Location = new System.Drawing.Point(404, 567);
+            this.tbCurrentPage.Location = new System.Drawing.Point(444, 514);
             this.tbCurrentPage.Margin = new System.Windows.Forms.Padding(0);
             this.tbCurrentPage.MaxLength = 4;
             this.tbCurrentPage.Name = "tbCurrentPage";
@@ -151,18 +151,19 @@
             // btnDeleteSelected
             // 
             this.btnDeleteSelected.Enabled = false;
-            this.btnDeleteSelected.Location = new System.Drawing.Point(707, 565);
+            this.btnDeleteSelected.Location = new System.Drawing.Point(815, 514);
             this.btnDeleteSelected.Name = "btnDeleteSelected";
             this.btnDeleteSelected.Size = new System.Drawing.Size(100, 23);
             this.btnDeleteSelected.TabIndex = 10;
             this.btnDeleteSelected.Text = "Usuń zaznaczone";
             this.btnDeleteSelected.UseVisualStyleBackColor = true;
+            this.btnDeleteSelected.Click += new System.EventHandler(this.btnDeleteSelected_Click);
             // 
             // BillTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 662);
+            this.ClientSize = new System.Drawing.Size(990, 600);
             this.Controls.Add(this.btnDeleteSelected);
             this.Controls.Add(this.tbCurrentPage);
             this.Controls.Add(this.lblNumberOfPages);
