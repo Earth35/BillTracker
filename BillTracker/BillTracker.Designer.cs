@@ -39,6 +39,7 @@
             this.tmrDateTime = new System.Windows.Forms.Timer(this.components);
             this.lblNumberOfPages = new System.Windows.Forms.Label();
             this.tbCurrentPage = new System.Windows.Forms.TextBox();
+            this.btnDeleteSelected = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoiceList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -147,11 +148,22 @@
             this.tbCurrentPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbCurrentPage.TextChanged += new System.EventHandler(this.tbCurrentPage_TextChanged);
             // 
+            // btnDeleteSelected
+            // 
+            this.btnDeleteSelected.Enabled = false;
+            this.btnDeleteSelected.Location = new System.Drawing.Point(707, 565);
+            this.btnDeleteSelected.Name = "btnDeleteSelected";
+            this.btnDeleteSelected.Size = new System.Drawing.Size(100, 23);
+            this.btnDeleteSelected.TabIndex = 10;
+            this.btnDeleteSelected.Text = "Usuń zaznaczone";
+            this.btnDeleteSelected.UseVisualStyleBackColor = true;
+            // 
             // BillTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 662);
+            this.Controls.Add(this.btnDeleteSelected);
             this.Controls.Add(this.tbCurrentPage);
             this.Controls.Add(this.lblNumberOfPages);
             this.Controls.Add(this.dgvInvoiceList);
@@ -185,6 +197,7 @@
         private System.Windows.Forms.Timer tmrDateTime;
         private System.Windows.Forms.Label lblNumberOfPages;
         private System.Windows.Forms.TextBox tbCurrentPage;
+        private System.Windows.Forms.Button btnDeleteSelected;
     }
 }
 

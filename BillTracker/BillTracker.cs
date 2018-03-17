@@ -15,6 +15,7 @@ namespace BillTracker
     {
         private const int ID_COLUMN_INDEX = 0;
         private const int MARKING_BUTTON_COLUMN_INDEX = 9;
+        private const int MARKING_FOR_DELETION_COLUMN_INDEX = 10;
         private const int NUMBER_OF_RECORDS_PER_PAGE = 20;
         private Dataset _invoiceDataset;
         // pagination
@@ -24,6 +25,8 @@ namespace BillTracker
         private int _lastPageIndex;
         private List<BindingList<Invoice>> _subsetsOfData = new List<BindingList<Invoice>>();
         private BindingList<Invoice> _currentSubset = new BindingList<Invoice>();
+        // marking for deletion
+        private int _numberOfSelectedInvoices = 0;
 
         public BillTracker()
         {
@@ -121,6 +124,14 @@ namespace BillTracker
                 UseColumnTextForButtonValue = true,
                                 
             });
+
+            dgvInvoiceList.Columns.Add(new DataGridViewCheckBoxColumn
+            {
+                HeaderText = "Usuń",
+                Width = 32,
+                TrueValue = true,
+                FalseValue = false
+            });
         }
 
         private void AdjustButtonColumnCells()
@@ -142,6 +153,23 @@ namespace BillTracker
                 }
                 selectedInvoice.PropertyChanged -= InvoiceOnPropertyChanged;
             }
+            else if (e.ColumnIndex == MARKING_FOR_DELETION_COLUMN_INDEX && e.RowIndex >= 0)
+            {
+                DataGridViewCheckBoxCell currentCell =
+                    (DataGridViewCheckBoxCell)dgvInvoiceList.Rows[e.RowIndex].Cells[MARKING_FOR_DELETION_COLUMN_INDEX];
+
+                if (currentCell.Value == currentCell.TrueValue)
+                {
+                    currentCell.Value = currentCell.FalseValue;
+                    _numberOfSelectedInvoices--;
+                }
+                else
+                {
+                    currentCell.Value = currentCell.TrueValue;
+                    _numberOfSelectedInvoices++;
+                }
+                ToggleDeleteButton();
+            }
         }
 
         private void HideCell (DataGridViewCell cell)
@@ -161,7 +189,7 @@ namespace BillTracker
                 
                 if (_currentSubset.First(i => i.InternalID == internalID).IsPaid)
                 {
-                    DataGridViewCell cellToHide = row.Cells[row.Cells.Count - 1];
+                    DataGridViewCell cellToHide = row.Cells[MARKING_BUTTON_COLUMN_INDEX];
                     HideCell(cellToHide);
                 }
             }
@@ -297,6 +325,12 @@ namespace BillTracker
             SetCurrentSubset();
             SetVisibilityOfPagingControls();
             DelayedInvoiceListRefresh();
+        }
+
+        private void ToggleDeleteButton()
+        {
+            if (_numberOfSelectedInvoices == 0) { btnDeleteSelected.Enabled = false; }
+            else { btnDeleteSelected.Enabled = true; }
         }
 
         private void btnFirstPage_Click(object sender, EventArgs e)
