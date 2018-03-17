@@ -13,6 +13,7 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
+        private const int ID_COLUMN_INDEX = 0;
         private const int MARKING_BUTTON_COLUMN_INDEX = 9;
         private const int NUMBER_OF_RECORDS_PER_PAGE = 20;
         private Dataset _invoiceDataset;
@@ -131,7 +132,7 @@ namespace BillTracker
         {
             if (e.ColumnIndex == MARKING_BUTTON_COLUMN_INDEX && e.RowIndex >= 0)
             {
-                int internalID = (int)dgvInvoiceList.Rows[e.RowIndex].Cells[0].Value;
+                int internalID = (int)dgvInvoiceList.Rows[e.RowIndex].Cells[ID_COLUMN_INDEX].Value;
                 Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InternalID == internalID);
                 selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
                 if (!selectedInvoice.IsPaid)
@@ -156,7 +157,7 @@ namespace BillTracker
             // search through the dataset by invoiceID, then hide buttons in rows where IsPaid property is true
             foreach (DataGridViewRow row in dgvInvoiceList.Rows)
             {
-                int internalID = (int)row.Cells[0].Value;
+                int internalID = (int)row.Cells[ID_COLUMN_INDEX].Value;
                 
                 if (_currentSubset.First(i => i.InternalID == internalID).IsPaid)
                 {
@@ -191,7 +192,7 @@ namespace BillTracker
             int lastID;
             if (dgvInvoiceList.Rows.Count != 0)
             {
-                lastID = (int)dgvInvoiceList.Rows[0].Cells[0].Value;
+                lastID = (int)dgvInvoiceList.Rows[0].Cells[ID_COLUMN_INDEX].Value;
             }
             else
             {
