@@ -35,7 +35,7 @@
             this.lblIssueDate = new System.Windows.Forms.Label();
             this.lblPaymentDueDate = new System.Windows.Forms.Label();
             this.lblTotalAmountCharged = new System.Windows.Forms.Label();
-            this.tbInvoiceID = new System.Windows.Forms.TextBox();
+            this.tbInvoiceNumber = new System.Windows.Forms.TextBox();
             this.tbIssuedBy = new System.Windows.Forms.TextBox();
             this.tbMonthSymbol = new System.Windows.Forms.TextBox();
             this.tbYearSymbol = new System.Windows.Forms.TextBox();
@@ -125,12 +125,12 @@
             this.lblTotalAmountCharged.Text = "Całkowita kwota:";
             this.lblTotalAmountCharged.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tbInvoiceID
+            // tbInvoiceNumber
             // 
-            this.tbInvoiceID.Location = new System.Drawing.Point(158, 55);
-            this.tbInvoiceID.Name = "tbInvoiceID";
-            this.tbInvoiceID.Size = new System.Drawing.Size(175, 20);
-            this.tbInvoiceID.TabIndex = 7;
+            this.tbInvoiceNumber.Location = new System.Drawing.Point(158, 55);
+            this.tbInvoiceNumber.Name = "tbInvoiceNumber";
+            this.tbInvoiceNumber.Size = new System.Drawing.Size(175, 20);
+            this.tbInvoiceNumber.TabIndex = 7;
             // 
             // tbIssuedBy
             // 
@@ -242,7 +242,7 @@
             this.Controls.Add(this.tbYearSymbol);
             this.Controls.Add(this.tbMonthSymbol);
             this.Controls.Add(this.tbIssuedBy);
-            this.Controls.Add(this.tbInvoiceID);
+            this.Controls.Add(this.tbInvoiceNumber);
             this.Controls.Add(this.lblTotalAmountCharged);
             this.Controls.Add(this.lblPaymentDueDate);
             this.Controls.Add(this.lblIssueDate);
@@ -267,7 +267,7 @@
         private System.Windows.Forms.Label lblIssueDate;
         private System.Windows.Forms.Label lblPaymentDueDate;
         private System.Windows.Forms.Label lblTotalAmountCharged;
-        private System.Windows.Forms.TextBox tbInvoiceID;
+        private System.Windows.Forms.TextBox tbInvoiceNumber;
         private System.Windows.Forms.TextBox tbIssuedBy;
         private System.Windows.Forms.TextBox tbMonthSymbol;
         private System.Windows.Forms.TextBox tbYearSymbol;
