@@ -41,7 +41,6 @@ namespace BillTracker
             DelayedInvoiceListRefresh();
         }
 
-        #region private methods
         private void DisplayDateAndTime()
         {
             lblCurrentDateTime.Text = Clock.GetCurrentDateAndTime();
@@ -206,9 +205,7 @@ namespace BillTracker
         {
             Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
         }
-        #endregion
 
-        #region events
         private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Status")
@@ -418,6 +415,5 @@ namespace BillTracker
                 ResetPagination();
             }
         }
-        #endregion
     }
 }
