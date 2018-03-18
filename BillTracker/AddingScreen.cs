@@ -42,26 +42,27 @@ namespace BillTracker
             DateTime paymentDueDate = DateTime.Parse(tbPaymentDueDate.Text);
             string totalAmountCharged = tbTotalAmountCharged.Text; // also passed by reference for validation
 
-            if (!Validator.RunBasicValidation(tbInvoiceNumber.Text, tbIssuedBy.Text, tbIssueDate.Text, tbPaymentDueDate.Text,
-                tbMonthSymbol.Text, tbYearSymbol.Text, tbTotalAmountCharged.Text))
+            Validator.Run(tbInvoiceNumber.Text, tbIssuedBy.Text, tbIssueDate.Text, tbPaymentDueDate.Text,
+                tbMonthSymbol.Text, tbYearSymbol.Text, tbTotalAmountCharged.Text, ref fullSymbol, ref totalAmountCharged);
+            if (!Validator.BasicStatus)
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (!Validator.RunDateValidation(tbIssueDate.Text, tbPaymentDueDate.Text))
+            else if (!Validator.DateStatus)
             {
                 MessageBox.Show("Błędny format daty. Wybierz datę z kalendarza.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (!Validator.RunSymbolValidation(ref fullSymbol))
+            else if (!Validator.SymbolStatus)
             {
                 MessageBox.Show("Symbol musi być podany w formacie miesiąc/rok, np. 01/18.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (!Validator.RunAmountValidation(ref totalAmountCharged))
+            else if (!Validator.AmountStatus)
             {
                 MessageBox.Show("Błędny format kwoty. Wprowadź poprawne dane.", "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

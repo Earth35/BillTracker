@@ -7,7 +7,21 @@ namespace TrackerLogic
 {
     public static class Validator
     {
-        public static bool RunBasicValidation (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
+        public static bool BasicStatus = false;
+        public static bool DateStatus = false;
+        public static bool SymbolStatus = false;
+        public static bool AmountStatus = false;
+
+        public static void Run (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
+            string monthSymbol, string yearSymbol, string totalAmountCharged, ref string symbolInput, ref string amountInput)
+        {
+            RunBasicValidation(invoiceNumber, issuedBy, issueDate, paymentDueDate, monthSymbol, yearSymbol, totalAmountCharged);
+            RunDateValidation(issueDate, paymentDueDate);
+            RunSymbolValidation(ref symbolInput);
+            RunAmountValidation(ref amountInput);
+        }
+
+        private static void RunBasicValidation (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
             string monthSymbol, string yearSymbol, string totalAmountCharged)
         {
             List<bool> inputStatus = new List<bool>();
@@ -21,23 +35,29 @@ namespace TrackerLogic
 
             if (inputStatus.All(s => s == false))
             {
-                return true;
+                BasicStatus = true;
             }
-            return false;
+            else
+            {
+                BasicStatus = false;
+            }
         }
 
-        public static bool RunDateValidation (string issueDate, string paymentDeadline)
+        private static void RunDateValidation (string issueDate, string paymentDeadline)
         {
             Regex format = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
             if ((format.IsMatch(issueDate) == true) && (format.IsMatch(paymentDeadline) == true))
             {
-                return true;
+                DateStatus = true;
             }
-            return false;
+            else
+            {
+                DateStatus = false;
+            }
         }
 
-        public static bool RunSymbolValidation (ref string symbolInput)
+        private static void RunSymbolValidation (ref string symbolInput)
         {
             Regex symbolPatternValidPartial = new Regex(@"^([1-9])/\d{2}$"); // 1-9 range for month variant
             Regex symbolPatternValidFull = new Regex(@"^(0[1-9])|(1[0-2])/\d{2}$"); // 1-12 range for M(M), any 2-digit year
@@ -45,16 +65,19 @@ namespace TrackerLogic
             if (symbolPatternValidPartial.IsMatch(symbolInput))
             {
                 symbolInput = symbolInput.Insert(0, "0");
-                return true;
+                SymbolStatus = true;
             }
             else if (symbolPatternValidFull.IsMatch(symbolInput))
             {
-                return true;
+                SymbolStatus = true;
             }
-            return false;
+            else
+            {
+                SymbolStatus = false;
+            }
         }
 
-        public static bool RunAmountValidation (ref string amountInput)
+        private static void RunAmountValidation (ref string amountInput)
         {
             Regex plnOnlyPattern = new Regex(@"^\d+$");
             Regex incompleteDecimalPattern = new Regex(@"^\d+(\.|,)\d$");
@@ -63,20 +86,23 @@ namespace TrackerLogic
             if (plnOnlyPattern.IsMatch(amountInput))
             {
                 amountInput += ",00";
-                return true;
+                AmountStatus = true;
             }
             else if (incompleteDecimalPattern.IsMatch(amountInput))
             {
                 ValidateDecimalSeparator(ref amountInput);
                 amountInput += "0";
-                return true;
+                AmountStatus = true;
             }
             else if (fullPattern.IsMatch(amountInput))
             {
                 ValidateDecimalSeparator(ref amountInput);
-                return true;
+                AmountStatus = true;
             }
-            return false;
+            else
+            {
+                AmountStatus = false;
+            }
         }
 
         private static void ValidateDecimalSeparator(ref string input)
