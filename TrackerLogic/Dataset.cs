@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Linq;
 
 namespace TrackerLogic
 {
@@ -14,7 +11,8 @@ namespace TrackerLogic
     {
         public BindingList<Invoice> Contents { get; set; }
 
-        private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\C#\BillTracker\DB\Database.mdf;Integrated Security=True;Connect Timeout=30";
+        private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + 
+            @"D:\C#\BillTracker\DB\Database.mdf;Integrated Security=True;Connect Timeout=30";
 
         public Dataset()
         {
@@ -78,7 +76,6 @@ namespace TrackerLogic
         {
             try
             {
-                // re-populate the database with updated data
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
@@ -100,9 +97,11 @@ namespace TrackerLogic
                         reseedCommand.ExecuteNonQuery();
                     }
 
-                    // insert updated entries
-                    // entries are currently in the "from latest to oldest" order
-                    // when re-inserted like this, the list will be in reverse order upon loading entries from the database
+                    /*  insert updated entries
+                        entries are currently in the "from latest to oldest" order
+                        when re-inserted like this, the list would be in reverse order upon loading entries from the database
+                        the list must be reversed before insertion  */
+
                     foreach (Invoice invoice in Contents.Reverse())
                     {
                         using (SqlCommand writeDataCommand = connection.CreateCommand())
@@ -115,7 +114,7 @@ namespace TrackerLogic
                                 "(@InvoiceId, @IssuedBy, @MonthYearSymbol, @IssueDate, @PaymentDueDate, @TotalAmountCharged, @PaymentDate)";
 
                             writeDataCommand.Parameters.Add("@InvoiceId", SqlDbType.Text);
-                            writeDataCommand.Parameters["@InvoiceId"].Value = invoice.InvoiceID;
+                            writeDataCommand.Parameters["@InvoiceId"].Value = invoice.InvoiceNumber;
                             writeDataCommand.Parameters.Add("@IssuedBy", SqlDbType.VarChar);
                             writeDataCommand.Parameters["@IssuedBy"].Value = invoice.IssuedBy;
                             writeDataCommand.Parameters.Add("@MonthYearSymbol", SqlDbType.Char);

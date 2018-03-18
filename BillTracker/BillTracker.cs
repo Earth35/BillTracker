@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrackerLogic;
@@ -13,19 +10,20 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
+        # region constants
         private const int ID_COLUMN_INDEX = 0;
         private const int MARKING_BUTTON_COLUMN_INDEX = 9;
         private const int MARKING_FOR_DELETION_COLUMN_INDEX = 10;
         private const int NUMBER_OF_RECORDS_PER_PAGE = 20;
+        #endregion
+
         private Dataset _invoiceDataset;
-        // pagination
         private int _currentDatasetSize;
         private int _numberOfPages;
         private int _currentPage = 0;
         private int _lastPageIndex;
         private List<BindingList<Invoice>> _subsetsOfData = new List<BindingList<Invoice>>();
         private BindingList<Invoice> _currentSubset = new BindingList<Invoice>();
-        // marking for deletion
         private int _numberOfSelectedInvoices = 0;
 
         public BillTracker()
@@ -43,6 +41,7 @@ namespace BillTracker
             DelayedInvoiceListRefresh();
         }
 
+        #region private methods
         private void DisplayDateAndTime()
         {
             lblCurrentDateTime.Text = Clock.GetCurrentDateAndTime();
@@ -64,7 +63,7 @@ namespace BillTracker
             {
                 HeaderText = "Numer faktury",
                 Width = 175,
-                DataPropertyName = "InvoiceID"
+                DataPropertyName = "InvoiceNumber"
             });
 
             dgvInvoiceList.Columns.Add(new DataGridViewTextBoxColumn
@@ -184,7 +183,7 @@ namespace BillTracker
 
         private void HideObsoleteButtons ()
         {
-            // search through the dataset by invoiceID, then hide buttons in rows where IsPaid property is true
+            // search through the dataset by invoice ID, then hide buttons in rows where IsPaid property is true
             foreach (DataGridViewRow row in dgvInvoiceList.Rows)
             {
                 int internalID = (int)row.Cells[ID_COLUMN_INDEX].Value;
@@ -197,11 +196,19 @@ namespace BillTracker
             }
         }
 
-        private void tmrDateTime_Tick(object sender, EventArgs e)
+        private void ResetDatasource()
         {
-            DisplayDateAndTime();
+            dgvInvoiceList.DataSource = typeof(BindingList<>);
+            dgvInvoiceList.DataSource = _currentSubset;
         }
 
+        private void DelayedInvoiceListRefresh()
+        {
+            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
+        }
+        #endregion
+
+        #region events
         private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Status")
@@ -211,10 +218,9 @@ namespace BillTracker
             }
         }
 
-        private void ResetDatasource ()
+        private void tmrDateTime_Tick(object sender, EventArgs e)
         {
-            dgvInvoiceList.DataSource = typeof(BindingList<>);
-            dgvInvoiceList.DataSource = _currentSubset;
+            DisplayDateAndTime();
         }
 
         private void btnAddInvoice_Click(object sender, EventArgs e)
@@ -231,11 +237,6 @@ namespace BillTracker
             AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
             addingScreen.ShowDialog();
             ResetPagination();
-        }
-
-        private void DelayedInvoiceListRefresh()
-        {
-            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
         }
 
         private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
@@ -407,5 +408,6 @@ namespace BillTracker
                 ResetPagination();
             }
         }
+        #endregion
     }
 }

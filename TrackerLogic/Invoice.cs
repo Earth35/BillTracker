@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 
 namespace TrackerLogic
@@ -12,7 +8,7 @@ namespace TrackerLogic
         private bool _isPaid;
 
         public int InternalID { get; set; }
-        public string InvoiceID { get; set; }
+        public string InvoiceNumber { get; set; }
         public string IssuedBy { get; set; }
         public string MonthYearSymbol { get; set; }
         public DateTime IssueDate { get; set; }
@@ -34,7 +30,7 @@ namespace TrackerLogic
             DateTime paymentDueDate, string totalAmountCharged)
         {
             InternalID = internalID;
-            InvoiceID = invoiceID;
+            InvoiceNumber = invoiceID;
             IssuedBy = issuedBy;
             MonthYearSymbol = monthYearSymbol;
             IssueDate = issueDate;
