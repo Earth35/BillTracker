@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillTracker", "BillTracker\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerLogic", "TrackerLogic\TrackerLogic.csproj", "{17F71A3D-0562-4F32-A78F-28B079EA9BD2}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{1898A0DD-6B89-4B30-9937-5BB9C0879B6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F71A3D-0562-4F32-A78F-28B079EA9BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1898A0DD-6B89-4B30-9937-5BB9C0879B6C}.Debug|Any CPU.ActiveCfg = Debug
+		{1898A0DD-6B89-4B30-9937-5BB9C0879B6C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

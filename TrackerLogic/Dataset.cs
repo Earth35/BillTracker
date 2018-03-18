@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace TrackerLogic
 {
@@ -12,7 +14,8 @@ namespace TrackerLogic
         public BindingList<Invoice> Contents { get; set; }
 
         private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + 
-            @"D:\C#\BillTracker\DB\Database.mdf;Integrated Security=True;Connect Timeout=30";
+            $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}" + @"\DB\Database.mdf;" +
+            "Integrated Security=True;Connect Timeout = 30";
 
         public Dataset()
         {

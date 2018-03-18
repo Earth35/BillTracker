@@ -143,13 +143,13 @@ namespace BillTracker
 
         private void ViewCurrentSubset()
         {
+            _currentSubset.Clear();
             if (_currentDatasetSize > 0)
             {
                 _currentSubset = _subsetsOfData[_currentPage];
                 tbCurrentPage.Text = (_currentPage + 1).ToString();
-                ResetDatasource();
             }
-
+            ResetDatasource();
             SetVisibilityOfPagingControls();
         }
 
@@ -226,6 +226,7 @@ namespace BillTracker
             Pagination.Set(_invoiceDataset, ref _currentDatasetSize, ref _numberOfPages, ref _lastPageIndex, _subsetsOfData);
             _currentPage = 0;
             ViewCurrentSubset();
+            HideObsoleteButtons();
         }
 
         private void RefreshPagingControls()
@@ -375,8 +376,8 @@ namespace BillTracker
                         _invoiceDataset.Contents.Remove(invoiceToDelete);
                     }
                 }
-                ResetInvoiceListView();
             }
+            ResetInvoiceListView();
         }
 
         private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
