@@ -15,13 +15,13 @@ namespace TrackerLogic
         public static void Run (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
             string monthSymbol, string yearSymbol, string totalAmountCharged, ref string symbolInput, ref string amountInput)
         {
-            RunBasicValidation(invoiceNumber, issuedBy, issueDate, paymentDueDate, monthSymbol, yearSymbol, totalAmountCharged);
-            RunDateValidation(issueDate, paymentDueDate);
-            RunSymbolValidation(ref symbolInput);
-            RunAmountValidation(ref amountInput);
+            BasicValidation(invoiceNumber, issuedBy, issueDate, paymentDueDate, monthSymbol, yearSymbol, totalAmountCharged);
+            DateValidation(issueDate, paymentDueDate);
+            SymbolValidation(ref symbolInput);
+            AmountValidation(ref amountInput);
         }
 
-        private static void RunBasicValidation (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
+        private static void BasicValidation (string invoiceNumber, string issuedBy, string issueDate, string paymentDueDate,
             string monthSymbol, string yearSymbol, string totalAmountCharged)
         {
             List<bool> inputStatus = new List<bool>();
@@ -43,7 +43,7 @@ namespace TrackerLogic
             }
         }
 
-        private static void RunDateValidation (string issueDate, string paymentDeadline)
+        private static void DateValidation (string issueDate, string paymentDeadline)
         {
             Regex format = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
@@ -57,7 +57,7 @@ namespace TrackerLogic
             }
         }
 
-        private static void RunSymbolValidation (ref string symbolInput)
+        private static void SymbolValidation (ref string symbolInput)
         {
             Regex symbolPatternValidPartial = new Regex(@"^([1-9])/\d{2}$"); // 1-9 range for month variant
             Regex symbolPatternValidFull = new Regex(@"^(0[1-9])|(1[0-2])/\d{2}$"); // 1-12 range for M(M), any 2-digit year
@@ -77,7 +77,7 @@ namespace TrackerLogic
             }
         }
 
-        private static void RunAmountValidation (ref string amountInput)
+        private static void AmountValidation (ref string amountInput)
         {
             Regex plnOnlyPattern = new Regex(@"^\d+$");
             Regex incompleteDecimalPattern = new Regex(@"^\d+(\.|,)\d$");

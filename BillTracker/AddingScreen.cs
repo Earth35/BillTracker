@@ -44,6 +44,7 @@ namespace BillTracker
 
             Validator.Run(tbInvoiceNumber.Text, tbIssuedBy.Text, tbIssueDate.Text, tbPaymentDueDate.Text,
                 tbMonthSymbol.Text, tbYearSymbol.Text, tbTotalAmountCharged.Text, ref fullSymbol, ref totalAmountCharged);
+
             if (!Validator.BasicStatus)
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd",

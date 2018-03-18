@@ -10,13 +10,13 @@ namespace BillTracker
 {
     public partial class BillTracker : Form
     {
-        # region constants
+        #region constants
         private const int ID_COLUMN_INDEX = 0;
         private const int MARKING_BUTTON_COLUMN_INDEX = 9;
         private const int MARKING_FOR_DELETION_COLUMN_INDEX = 10;
-        private const int NUMBER_OF_RECORDS_PER_PAGE = 20;
         #endregion
 
+        #region paginationVariables
         private Dataset _invoiceDataset;
         private int _currentDatasetSize;
         private int _numberOfPages;
@@ -25,6 +25,7 @@ namespace BillTracker
         private List<BindingList<Invoice>> _subsetsOfData = new List<BindingList<Invoice>>();
         private BindingList<Invoice> _currentSubset = new BindingList<Invoice>();
         private int _numberOfSelectedInvoices = 0;
+        #endregion
 
         public BillTracker()
         {
@@ -33,9 +34,10 @@ namespace BillTracker
             _invoiceDataset = new Dataset();
 
             DisplayDateAndTime();
-            UpdateInvoiceList();
+            BuildInvoiceListSchema();
             AdjustButtonColumnCells();
-            AddPagination();
+            Pagination.Set(_invoiceDataset, ref _currentDatasetSize, ref _numberOfPages, ref _lastPageIndex, _subsetsOfData);
+            ViewCurrentSubset();
             dgvInvoiceList.DataSource = _currentSubset;
             dgvInvoiceList.CellContentClick += dgvInvoiceList_CellContentClick;
             DelayedInvoiceListRefresh();
@@ -46,7 +48,7 @@ namespace BillTracker
             lblCurrentDateTime.Text = Clock.GetCurrentDateAndTime();
         }
 
-        private void UpdateInvoiceList()
+        private void BuildInvoiceListSchema()
         {
             dgvInvoiceList.RowHeadersVisible = false;
             dgvInvoiceList.AutoGenerateColumns = false;
@@ -139,156 +141,22 @@ namespace BillTracker
             dgvInvoiceList.Columns[MARKING_BUTTON_COLUMN_INDEX].DefaultCellStyle.Padding = new Padding(25, 0, 25, 0);
         }
 
-        private void dgvInvoiceList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void ViewCurrentSubset()
         {
-            if (e.ColumnIndex == MARKING_BUTTON_COLUMN_INDEX && e.RowIndex >= 0)
+            if (_currentDatasetSize > 0)
             {
-                int internalID = (int)dgvInvoiceList.Rows[e.RowIndex].Cells[ID_COLUMN_INDEX].Value;
-                Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InternalID == internalID);
-                selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
-                if (!selectedInvoice.IsPaid)
-                {
-                    MarkingScreen markingScreen = new MarkingScreen(selectedInvoice);
-                    markingScreen.ShowDialog(this);
-                }
-                selectedInvoice.PropertyChanged -= InvoiceOnPropertyChanged;
+                _currentSubset = _subsetsOfData[_currentPage];
+                tbCurrentPage.Text = (_currentPage + 1).ToString();
+                ResetDatasource();
             }
-            else if (e.ColumnIndex == MARKING_FOR_DELETION_COLUMN_INDEX && e.RowIndex >= 0)
-            {
-                DataGridViewCheckBoxCell currentCell =
-                    (DataGridViewCheckBoxCell)dgvInvoiceList.Rows[e.RowIndex].Cells[MARKING_FOR_DELETION_COLUMN_INDEX];
 
-                if (currentCell.Value == currentCell.TrueValue)
-                {
-                    currentCell.Value = currentCell.FalseValue;
-                    _numberOfSelectedInvoices--;
-                }
-                else
-                {
-                    currentCell.Value = currentCell.TrueValue;
-                    _numberOfSelectedInvoices++;
-                }
-                ToggleDeleteButton();
-            }
-        }
-
-        private void HideCell (DataGridViewCell cell)
-        {
-            // padding = cell width + 1 workaround
-            DataGridViewCellStyle styleTypeHidden = new DataGridViewCellStyle();
-            styleTypeHidden.Padding = new Padding(cell.Size.Width + 1, 0, 0, 0);
-            cell.Style = styleTypeHidden;
-        }
-
-        private void HideObsoleteButtons ()
-        {
-            // search through the dataset by invoice ID, then hide buttons in rows where IsPaid property is true
-            foreach (DataGridViewRow row in dgvInvoiceList.Rows)
-            {
-                int internalID = (int)row.Cells[ID_COLUMN_INDEX].Value;
-                
-                if (_currentSubset.First(i => i.InternalID == internalID).IsPaid)
-                {
-                    DataGridViewCell cellToHide = row.Cells[MARKING_BUTTON_COLUMN_INDEX];
-                    HideCell(cellToHide);
-                }
-            }
+            SetVisibilityOfPagingControls();
         }
 
         private void ResetDatasource()
         {
             dgvInvoiceList.DataSource = typeof(BindingList<>);
             dgvInvoiceList.DataSource = _currentSubset;
-        }
-
-        private void DelayedInvoiceListRefresh()
-        {
-            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
-        }
-
-        private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Status")
-            {
-                ResetDatasource();
-                HideObsoleteButtons();
-            }
-        }
-
-        private void tmrDateTime_Tick(object sender, EventArgs e)
-        {
-            DisplayDateAndTime();
-        }
-
-        private void btnAddInvoice_Click(object sender, EventArgs e)
-        {
-            int lastID;
-            if (dgvInvoiceList.Rows.Count != 0)
-            {
-                lastID = (int)dgvInvoiceList.Rows[0].Cells[ID_COLUMN_INDEX].Value;
-            }
-            else
-            {
-                lastID = 0; // first row always contains the latest invoice
-            }
-            AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
-            addingScreen.ShowDialog();
-            ResetPagination();
-        }
-
-        private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _invoiceDataset.SaveDataset();
-        }
-
-        private void AddPagination()
-        {
-            _subsetsOfData.Clear();
-            _currentDatasetSize = _invoiceDataset.Contents.Count();
-            if (_currentDatasetSize == 0)
-            {
-                _numberOfPages = 1;
-            }
-            else
-            {
-                if (_currentDatasetSize % NUMBER_OF_RECORDS_PER_PAGE == 0)
-                {
-                    _numberOfPages = _currentDatasetSize / NUMBER_OF_RECORDS_PER_PAGE;
-                }
-                else
-                {
-                    _numberOfPages = (_currentDatasetSize / NUMBER_OF_RECORDS_PER_PAGE) + 1;
-                }
-            }
-            _lastPageIndex = _numberOfPages - 1;
-
-            for (int n = 0; n < _numberOfPages; n++)
-            {
-                List<Invoice> currentSubset =
-                    _invoiceDataset.Contents.Skip(n * NUMBER_OF_RECORDS_PER_PAGE).Take(NUMBER_OF_RECORDS_PER_PAGE).ToList();
-                BindingList<Invoice> bindingSubset = new BindingList<Invoice>(currentSubset);
-
-                _subsetsOfData.Add(bindingSubset);
-            }
-            if (_currentDatasetSize > 0)
-            {
-                SetCurrentSubset();
-            }
-            SetVisibilityOfPagingControls();
-        }
-
-        private void SetCurrentSubset ()
-        {
-            _currentSubset = _subsetsOfData[_currentPage];
-            tbCurrentPage.Text = (_currentPage + 1).ToString();
-            ResetDatasource();
-        }
-
-        private void ResetPagination()
-        {
-            AddPagination();
-            _currentPage = 0;
-            SetCurrentSubset();
         }
 
         private void SetVisibilityOfPagingControls()
@@ -325,9 +193,44 @@ namespace BillTracker
             }
         }
 
+        private void DelayedInvoiceListRefresh()
+        {
+            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
+        }
+
+        private void HideObsoleteButtons()
+        {
+            // search through the dataset by invoice ID, then hide buttons in rows where IsPaid property is true
+            foreach (DataGridViewRow row in dgvInvoiceList.Rows)
+            {
+                int internalID = (int)row.Cells[ID_COLUMN_INDEX].Value;
+
+                if (_currentSubset.First(i => i.InternalID == internalID).IsPaid)
+                {
+                    DataGridViewCell cellToHide = row.Cells[MARKING_BUTTON_COLUMN_INDEX];
+                    HideCell(cellToHide);
+                }
+            }
+        }
+
+        private void HideCell(DataGridViewCell cell)
+        {
+            // padding = cell width + 1 workaround
+            DataGridViewCellStyle styleTypeHidden = new DataGridViewCellStyle();
+            styleTypeHidden.Padding = new Padding(cell.Size.Width + 1, 0, 0, 0);
+            cell.Style = styleTypeHidden;
+        }
+
+        private void ResetInvoiceListView()
+        {
+            Pagination.Set(_invoiceDataset, ref _currentDatasetSize, ref _numberOfPages, ref _lastPageIndex, _subsetsOfData);
+            _currentPage = 0;
+            ViewCurrentSubset();
+        }
+
         private void RefreshPagingControls()
         {
-            SetCurrentSubset();
+            ViewCurrentSubset();
             SetVisibilityOfPagingControls();
             DelayedInvoiceListRefresh();
         }
@@ -342,6 +245,53 @@ namespace BillTracker
         {
             _numberOfSelectedInvoices = 0;
             ToggleDeleteButton();
+        }
+
+        private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Status")
+            {
+                ResetDatasource();
+                HideObsoleteButtons();
+            }
+        }
+
+        private void dgvInvoiceList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == MARKING_BUTTON_COLUMN_INDEX && e.RowIndex >= 0)
+            {
+                int internalID = (int)dgvInvoiceList.Rows[e.RowIndex].Cells[ID_COLUMN_INDEX].Value;
+                Invoice selectedInvoice = _invoiceDataset.Contents.FirstOrDefault(i => i.InternalID == internalID);
+                selectedInvoice.PropertyChanged += InvoiceOnPropertyChanged;
+                if (!selectedInvoice.IsPaid)
+                {
+                    MarkingScreen markingScreen = new MarkingScreen(selectedInvoice);
+                    markingScreen.ShowDialog(this);
+                }
+                selectedInvoice.PropertyChanged -= InvoiceOnPropertyChanged;
+            }
+            else if (e.ColumnIndex == MARKING_FOR_DELETION_COLUMN_INDEX && e.RowIndex >= 0)
+            {
+                DataGridViewCheckBoxCell currentCell =
+                    (DataGridViewCheckBoxCell)dgvInvoiceList.Rows[e.RowIndex].Cells[MARKING_FOR_DELETION_COLUMN_INDEX];
+
+                if (currentCell.Value == currentCell.TrueValue)
+                {
+                    currentCell.Value = currentCell.FalseValue;
+                    _numberOfSelectedInvoices--;
+                }
+                else
+                {
+                    currentCell.Value = currentCell.TrueValue;
+                    _numberOfSelectedInvoices++;
+                }
+                ToggleDeleteButton();
+            }
+        }
+
+        private void tmrDateTime_Tick(object sender, EventArgs e)
+        {
+            DisplayDateAndTime();
         }
 
         private void btnFirstPage_Click(object sender, EventArgs e)
@@ -376,14 +326,12 @@ namespace BillTracker
 
         private void tbCurrentPage_TextChanged(object sender, EventArgs e)
         {
-            int readPage = 0;
-
-            if (int.TryParse(tbCurrentPage.Text, out readPage))
+            if (int.TryParse(tbCurrentPage.Text, out int indexOfPageToRead))
             {
-                readPage--;
-                if (readPage >= 0 && readPage <= _lastPageIndex)
+                indexOfPageToRead--;
+                if (indexOfPageToRead >= 0 && indexOfPageToRead <= _lastPageIndex)
                 {
-                    _currentPage = readPage;
+                    _currentPage = indexOfPageToRead;
                     RefreshPagingControls();
                 }
                 else
@@ -391,6 +339,22 @@ namespace BillTracker
                     MessageBox.Show("Wskazana strona nie istnieje.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
+        }
+
+        private void btnAddInvoice_Click(object sender, EventArgs e)
+        {
+            int lastID;
+            if (dgvInvoiceList.Rows.Count != 0)
+            {
+                lastID = (int)dgvInvoiceList.Rows[0].Cells[ID_COLUMN_INDEX].Value;
+            }
+            else
+            {
+                lastID = 0; // first row always contains the latest invoice
+            }
+            AddingScreen addingScreen = new AddingScreen(_invoiceDataset, lastID);
+            addingScreen.ShowDialog();
+            ResetInvoiceListView();
         }
 
         private void btnDeleteSelected_Click(object sender, EventArgs e)
@@ -411,9 +375,13 @@ namespace BillTracker
                         _invoiceDataset.Contents.Remove(invoiceToDelete);
                     }
                 }
-
-                ResetPagination();
+                ResetInvoiceListView();
             }
+        }
+
+        private void BillTracker_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _invoiceDataset.SaveDataset();
         }
     }
 }
