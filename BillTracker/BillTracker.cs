@@ -341,9 +341,16 @@ namespace BillTracker
             else { btnDeleteSelected.Enabled = true; }
         }
 
+        private void ResetSelection()
+        {
+            _numberOfSelectedInvoices = 0;
+            ToggleDeleteButton();
+        }
+
         private void btnFirstPage_Click(object sender, EventArgs e)
         {
             _currentPage = 0;
+            ResetSelection();
             RefreshPagingControls();
         }
 
@@ -351,6 +358,7 @@ namespace BillTracker
         {
             _currentPage -= 1;
             if (_currentPage < 0) { _currentPage = 0; } // guard clause
+            ResetSelection();
             RefreshPagingControls();
         }
 
@@ -358,12 +366,14 @@ namespace BillTracker
         {
             _currentPage++;
             if (_currentPage > _lastPageIndex) { _currentPage = _lastPageIndex; } // guard clause
+            ResetSelection();
             RefreshPagingControls();
         }
 
         private void btnLastPage_Click(object sender, EventArgs e)
         {
             _currentPage = _lastPageIndex;
+            ResetSelection();
             RefreshPagingControls();
         }
 
