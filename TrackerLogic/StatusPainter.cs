@@ -9,34 +9,34 @@ namespace TrackerLogic
         private const int PAYMENT_DUE_DATE_INDEX = 5;
         private const int PAYMENT_DATE_INDEX = 6;
 
-        private static DateTime currentDate = DateTime.Parse(Clock.GetCurrentDateAndTime());
-        private static DateTime paymentDueDate;
-        private static DateTime paymentDate;
-        private static bool isPaid = false;
-
-        private static string status;
-        private static Color backgroundColor;
-
-        public static void PaintRow (DataGridViewRow rowToPaint)
+        public static void PaintRow(DataGridViewRow rowToPaint)
         {
+            DateTime currentDate = DateTime.Now;
+            DateTime paymentDueDate = DateTime.MinValue;
+            DateTime paymentDate = DateTime.MinValue;
+            bool isPaid = false;
+
+            string status = "default";
+            Color backgroundColor = Color.White;
+
             paymentDueDate = (DateTime)rowToPaint.Cells[PAYMENT_DUE_DATE_INDEX].Value;
 
-            if (rowToPaint.Cells[PAYMENT_DATE_INDEX].Value != null)
+            if ((DateTime)rowToPaint.Cells[PAYMENT_DATE_INDEX].Value != Convert.ToDateTime("0001-01-01 00:00:00"))
             {
                 paymentDate = (DateTime)rowToPaint.Cells[PAYMENT_DATE_INDEX].Value;
                 isPaid = true;
             }
 
-            status = CheckStatus();
-            SetColor(status);
-            PaintCells(rowToPaint);
+            status = CheckStatus(isPaid, currentDate, paymentDueDate, paymentDate);
+            SetColor(status, ref backgroundColor);
+            PaintCells(rowToPaint, backgroundColor);
         }
 
-        private static string CheckStatus ()
+        private static string CheckStatus(bool isPaid, DateTime currentDate, DateTime paymentDueDate, DateTime paymentDate)
         {
             if (isPaid)
             {
-                if (DateTime.Compare(paymentDate, paymentDueDate) >= 0)  // invoice paid in time
+                if (DateTime.Compare(paymentDate, paymentDueDate) <= 0)  // invoice paid in time
                 {
                     return "ok";
                 }
@@ -48,11 +48,11 @@ namespace TrackerLogic
             else
             {
                 // for unpaid invoices
-                if (DateTime.Compare(currentDate, paymentDueDate) == 1)  // overdue and unpaid
+                if ((DateTime.Compare(currentDate, paymentDueDate) == 1) && (paymentDueDate.Subtract(currentDate).Days < 0))
                 {
                     return "overdue";
                 }
-                else if (paymentDueDate.Subtract(currentDate).Days <= 3)  // payment due time <= 3 days
+                else if (paymentDueDate.Subtract(currentDate).Days <= 3)
                 {
                     return "warning";
                 }
@@ -63,7 +63,7 @@ namespace TrackerLogic
             }
         }
 
-        private static void SetColor (string type)
+        private static void SetColor(string type, ref Color backgroundColor)
         {
             switch (type)
             {
@@ -94,7 +94,7 @@ namespace TrackerLogic
             }
         }
 
-        private static void PaintCells (DataGridViewRow rowToPaint)
+        private static void PaintCells(DataGridViewRow rowToPaint, Color backgroundColor)
         {
             foreach (DataGridViewCell cell in rowToPaint.Cells)
             {

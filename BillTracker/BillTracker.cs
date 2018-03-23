@@ -195,7 +195,8 @@ namespace BillTracker
 
         private void DelayedInvoiceListRefresh()
         {
-            Task.Delay(TimeSpan.FromMilliseconds(250)).ContinueWith(task => HideObsoleteButtons());
+            Task.Delay(TimeSpan.FromMilliseconds(250))
+                .ContinueWith(task => HideObsoleteButtons()).ContinueWith(task => PaintRows());
         }
 
         private void HideObsoleteButtons()
@@ -227,6 +228,7 @@ namespace BillTracker
             _currentPage = 0;
             ViewCurrentSubset();
             HideObsoleteButtons();
+            PaintRows();
         }
 
         private void RefreshPagingControls()
@@ -248,12 +250,21 @@ namespace BillTracker
             ToggleDeleteButton();
         }
 
+        private void PaintRows()
+        {
+            foreach (DataGridViewRow row in dgvInvoiceList.Rows)
+            {
+                StatusPainter.PaintRow(row);
+            }
+        }
+
         private void InvoiceOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Status")
             {
                 ResetDatasource();
                 HideObsoleteButtons();
+                PaintRows();
             }
         }
 
