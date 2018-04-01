@@ -148,6 +148,10 @@ namespace BillTracker
                 _currentSubset = _subsetsOfData[_currentPage];
                 tbCurrentPage.Text = (_currentPage + 1).ToString();
             }
+            else
+            {
+                _currentSubset.Clear();
+            }
             ResetDatasource();
             SetVisibilityOfPagingControls();
         }
@@ -387,6 +391,7 @@ namespace BillTracker
                     }
                 }
             }
+            ResetSelection();
             ResetInvoiceListView();
         }
 
