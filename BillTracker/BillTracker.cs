@@ -143,7 +143,6 @@ namespace BillTracker
 
         private void ViewCurrentSubset()
         {
-            _currentSubset.Clear();
             if (_currentDatasetSize > 0)
             {
                 _currentSubset = _subsetsOfData[_currentPage];
@@ -195,7 +194,7 @@ namespace BillTracker
 
         private void DelayedInvoiceListRefresh()
         {
-            Task.Delay(TimeSpan.FromMilliseconds(250))
+            Task.Delay(TimeSpan.FromMilliseconds(150))
                 .ContinueWith(task => HideObsoleteButtons()).ContinueWith(task => PaintRows());
         }
 
@@ -234,7 +233,6 @@ namespace BillTracker
         private void RefreshPagingControls()
         {
             ViewCurrentSubset();
-            SetVisibilityOfPagingControls();
             DelayedInvoiceListRefresh();
         }
 
@@ -344,6 +342,7 @@ namespace BillTracker
                 if (indexOfPageToRead >= 0 && indexOfPageToRead <= _lastPageIndex)
                 {
                     _currentPage = indexOfPageToRead;
+                    ResetSelection();
                     RefreshPagingControls();
                 }
                 else
