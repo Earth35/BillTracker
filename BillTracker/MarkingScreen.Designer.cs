@@ -44,7 +44,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(12, 205);
+            this.btnCancel.Location = new System.Drawing.Point(72, 205);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             // btnSubmit
             // 
-            this.btnSubmit.Location = new System.Drawing.Point(94, 205);
+            this.btnSubmit.Location = new System.Drawing.Point(153, 205);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
             this.btnSubmit.TabIndex = 2;
@@ -74,7 +74,7 @@
             // lblWarning
             // 
             this.lblWarning.AutoSize = true;
-            this.lblWarning.Location = new System.Drawing.Point(14, 238);
+            this.lblWarning.Location = new System.Drawing.Point(69, 236);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(159, 26);
             this.lblWarning.TabIndex = 5;
@@ -85,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(179, 273);
+            this.ClientSize = new System.Drawing.Size(294, 271);
             this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSubmit);

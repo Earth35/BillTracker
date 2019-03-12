@@ -45,9 +45,10 @@ namespace TrackerLogic
 
         private static void DateValidation (string issueDate, string paymentDeadline)
         {
-            Regex format = new Regex(@"^\d{4}-\d{2}-\d{2}$");
+            List<Regex> dateFormats = new List<Regex>();
+            DefineValidDateFormats(ref dateFormats);
 
-            if ((format.IsMatch(issueDate) == true) && (format.IsMatch(paymentDeadline) == true))
+            if ( dateFormats.Exists(x => x.IsMatch(issueDate) && dateFormats.Exists(y => y.IsMatch(paymentDeadline))) )
             {
                 DateStatus = true;
             }
@@ -113,6 +114,16 @@ namespace TrackerLogic
             {
                 input.Replace(".", ",");
             }
+        }
+
+        private static void DefineValidDateFormats(ref List<Regex> dateFormats)
+        {
+            dateFormats.Add(new Regex(@"^\d{4}-\d{2}-\d{2}$"));    // dash-separated
+            dateFormats.Add(new Regex(@"^\d{2}-\d{2}-\d{4}$"));
+            dateFormats.Add(new Regex(@"^\d{4}\.\d{2}\.\d{2}$"));    // dot-separated
+            dateFormats.Add(new Regex(@"^\d{2}\.\d{2}\.\d{4}$"));
+            dateFormats.Add(new Regex(@"^\d{4}/\d{2}/\d{2}$"));    // slash-separated
+            dateFormats.Add(new Regex(@"^\d{2}/\d{2}/\d{4}$"));
         }
     }
 }
