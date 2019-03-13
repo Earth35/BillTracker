@@ -47,6 +47,7 @@
             this.lblSeparator = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
+            this.btnNewIssuer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -182,7 +183,7 @@
             // 
             // calIssueDate
             // 
-            this.calIssueDate.Location = new System.Drawing.Point(525, 78);
+            this.calIssueDate.Location = new System.Drawing.Point(507, 87);
             this.calIssueDate.MaxSelectionCount = 1;
             this.calIssueDate.Name = "calIssueDate";
             this.calIssueDate.TabIndex = 14;
@@ -190,7 +191,7 @@
             // 
             // calPaymentDueDate
             // 
-            this.calPaymentDueDate.Location = new System.Drawing.Point(525, 285);
+            this.calPaymentDueDate.Location = new System.Drawing.Point(507, 285);
             this.calPaymentDueDate.MaxSelectionCount = 1;
             this.calPaymentDueDate.Name = "calPaymentDueDate";
             this.calPaymentDueDate.TabIndex = 15;
@@ -226,11 +227,22 @@
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
+            // btnNewIssuer
+            // 
+            this.btnNewIssuer.Location = new System.Drawing.Point(339, 155);
+            this.btnNewIssuer.Name = "btnNewIssuer";
+            this.btnNewIssuer.Size = new System.Drawing.Size(25, 25);
+            this.btnNewIssuer.TabIndex = 19;
+            this.btnNewIssuer.Text = "+";
+            this.btnNewIssuer.UseVisualStyleBackColor = true;
+            this.btnNewIssuer.Click += new System.EventHandler(this.btnNewIssuer_Click);
+            // 
             // AddingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(823, 471);
+            this.Controls.Add(this.btnNewIssuer);
             this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblSeparator);
@@ -279,5 +291,6 @@
         private System.Windows.Forms.Label lblSeparator;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSubmit;
+        private System.Windows.Forms.Button btnNewIssuer;
     }
 }

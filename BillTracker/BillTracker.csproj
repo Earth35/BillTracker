@@ -57,6 +57,12 @@
     <Compile Include="BillTracker.Designer.cs">
       <DependentUpon>BillTracker.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddIssuerScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddIssuerScreen.Designer.cs">
+      <DependentUpon>AddIssuerScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="MarkingScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AddingScreen.resx">
       <DependentUpon>AddingScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddIssuerScreen.resx">
+      <DependentUpon>AddIssuerScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BillTracker.resx">
       <DependentUpon>BillTracker.cs</DependentUpon>

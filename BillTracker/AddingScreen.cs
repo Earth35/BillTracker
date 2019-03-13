@@ -110,5 +110,11 @@ namespace BillTracker
                 SetTextboxContent(tbPaymentDueDate, calPaymentDueDate.SelectionStart);
             }
         }
+
+        private void btnNewIssuer_Click(object sender, EventArgs e)
+        {
+            AddIssuerScreen addIssuerScreen = new AddIssuerScreen();
+            addIssuerScreen.ShowDialog();
+        }
     }
 }
