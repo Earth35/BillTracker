@@ -118,12 +118,8 @@ namespace TrackerLogic
 
         private static void DefineValidDateFormats(ref List<Regex> dateFormats)
         {
-            dateFormats.Add(new Regex(@"^\d{4}-\d{2}-\d{2}$"));    // dash-separated
-            dateFormats.Add(new Regex(@"^\d{2}-\d{2}-\d{4}$"));
-            dateFormats.Add(new Regex(@"^\d{4}\.\d{2}\.\d{2}$"));    // dot-separated
-            dateFormats.Add(new Regex(@"^\d{2}\.\d{2}\.\d{4}$"));
-            dateFormats.Add(new Regex(@"^\d{4}/\d{2}/\d{2}$"));    // slash-separated
-            dateFormats.Add(new Regex(@"^\d{2}/\d{2}/\d{4}$"));
+            dateFormats.Add(new Regex(@"^\d{4}[-\./]\d{2}[-\./]\d{2}$"));    // dash-, dot- and slash-separated
+            dateFormats.Add(new Regex(@"^\d{2}[-\./]\d{2}[-\./]\d{4}$"));
         }
     }
 }
