@@ -144,5 +144,30 @@ namespace BillTracker
             string json = JsonConvert.SerializeObject(_issuers);
             File.WriteAllText(ISSUER_BASE_FILE, json);
         }
+
+        private void cbxIssuedBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IssuerNotSelected())
+            {
+                btnDeleteIssuer.Visible = false;
+            }
+            else
+            {
+                btnDeleteIssuer.Visible = true;
+            }
+        }
+
+        private void btnDeleteIssuer_Click(object sender, EventArgs e)
+        {
+            if (!IssuerNotSelected())
+            {
+                _issuers.Remove(cbxIssuedBy.Text);
+            }
+        }
+
+        private bool IssuerNotSelected()
+        {
+            return String.IsNullOrWhiteSpace(cbxIssuedBy.Text);
+        }
     }
 }

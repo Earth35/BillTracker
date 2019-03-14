@@ -48,6 +48,7 @@
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnNewIssuer = new System.Windows.Forms.Button();
             this.cbxIssuedBy = new System.Windows.Forms.ComboBox();
+            this.btnDeleteIssuer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -238,12 +239,26 @@
             this.cbxIssuedBy.Name = "cbxIssuedBy";
             this.cbxIssuedBy.Size = new System.Drawing.Size(172, 21);
             this.cbxIssuedBy.TabIndex = 20;
+            this.cbxIssuedBy.SelectedIndexChanged += new System.EventHandler(this.cbxIssuedBy_SelectedIndexChanged);
+            // 
+            // btnDeleteIssuer
+            // 
+            this.btnDeleteIssuer.Location = new System.Drawing.Point(367, 156);
+            this.btnDeleteIssuer.Name = "btnDeleteIssuer";
+            this.btnDeleteIssuer.Size = new System.Drawing.Size(25, 25);
+            this.btnDeleteIssuer.TabIndex = 21;
+            this.btnDeleteIssuer.Text = "-";
+            this.btnDeleteIssuer.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.btnDeleteIssuer.UseVisualStyleBackColor = true;
+            this.btnDeleteIssuer.Visible = false;
+            this.btnDeleteIssuer.Click += new System.EventHandler(this.btnDeleteIssuer_Click);
             // 
             // AddingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(823, 471);
+            this.Controls.Add(this.btnDeleteIssuer);
             this.Controls.Add(this.cbxIssuedBy);
             this.Controls.Add(this.btnNewIssuer);
             this.Controls.Add(this.btnSubmit);
@@ -295,5 +310,6 @@
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnNewIssuer;
         private System.Windows.Forms.ComboBox cbxIssuedBy;
+        private System.Windows.Forms.Button btnDeleteIssuer;
     }
 }
