@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblInvoiceID = new System.Windows.Forms.Label();
             this.lblIssuedBy = new System.Windows.Forms.Label();
@@ -49,10 +48,6 @@
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnNewIssuer = new System.Windows.Forms.Button();
             this.cbxIssuedBy = new System.Windows.Forms.ComboBox();
-            this.addingScreenBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.addingScreenBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -272,8 +267,7 @@
             this.Name = "AddingScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Dodaj fakturę";
-            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource1)).EndInit();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddingScreen_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,7 +295,5 @@
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnNewIssuer;
         private System.Windows.Forms.ComboBox cbxIssuedBy;
-        private System.Windows.Forms.BindingSource addingScreenBindingSource;
-        private System.Windows.Forms.BindingSource addingScreenBindingSource1;
     }
 }

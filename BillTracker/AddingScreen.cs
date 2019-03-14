@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using TrackerLogic;
+using Newtonsoft.Json;
 
 namespace BillTracker
 {
     public partial class AddingScreen : Form
     {
+        private const string ISSUER_BASE_FILE = "issuers.json";
         private Dataset _currentDataset;
         private BindingList<string> _issuers;
         private int _lastID;
@@ -29,9 +32,11 @@ namespace BillTracker
         
         private void BindIssuersToDropdownMenu()
         {
-            /* TODO
-             * load issuers from XML/JSON file, populate the BindingList
-             * then set the binding list as cbx datasource */
+            if (File.Exists(ISSUER_BASE_FILE))
+            {
+                string json = File.ReadAllText(ISSUER_BASE_FILE);
+                _issuers = JsonConvert.DeserializeObject<BindingList<string>>(json);
+            }
             cbxIssuedBy.DataSource = _issuers;
         }
 
@@ -127,6 +132,17 @@ namespace BillTracker
         {
             AddIssuerScreen addIssuerScreen = new AddIssuerScreen(_issuers);
             addIssuerScreen.ShowDialog();
+        }
+
+        private void AddingScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveIssuersToFile();
+        }
+
+        private void SaveIssuersToFile()
+        {
+            string json = JsonConvert.SerializeObject(_issuers);
+            File.WriteAllText(ISSUER_BASE_FILE, json);
         }
     }
 }
