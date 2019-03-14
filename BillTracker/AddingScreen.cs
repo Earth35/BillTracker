@@ -29,6 +29,9 @@ namespace BillTracker
         
         private void BindIssuersToDropdownMenu()
         {
+            /* TODO
+             * load issuers from XML/JSON file, populate the BindingList
+             * then set the binding list as cbx datasource */
             cbxIssuedBy.DataSource = _issuers;
         }
 

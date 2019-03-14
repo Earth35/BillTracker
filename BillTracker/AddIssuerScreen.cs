@@ -12,7 +12,7 @@ namespace BillTracker
 {
     public partial class AddIssuerScreen : Form
     {
-        BindingList<string> _issuers = new BindingList<string>();
+        private BindingList<string> _issuers = new BindingList<string>();
 
         public AddIssuerScreen(BindingList<string> issuers)
         {
