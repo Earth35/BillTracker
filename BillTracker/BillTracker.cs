@@ -283,6 +283,8 @@ namespace BillTracker
                     markingScreen.ShowDialog(this);
                 }
                 selectedInvoice.PropertyChanged -= InvoiceOnPropertyChanged;
+                ResetSelection();
+                ResetInvoiceListView();
             }
             else if (e.ColumnIndex == MARKING_FOR_DELETION_COLUMN_INDEX && e.RowIndex >= 0)
             {
