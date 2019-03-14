@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using TrackerLogic;
 
@@ -7,14 +8,17 @@ namespace BillTracker
     public partial class AddingScreen : Form
     {
         private Dataset _currentDataset;
+        private BindingList<string> _issuers;
         private int _lastID;
 
         public AddingScreen(Dataset dataset, int lastID)
         {
             InitializeComponent();
             _currentDataset = dataset;
+            _issuers = new BindingList<string>();
             _lastID = lastID;
             SetDefaultDates();
+            BindIssuersToDropdownMenu();
         }
 
         private void SetDefaultDates()
@@ -23,6 +27,11 @@ namespace BillTracker
             tbPaymentDueDate.Text = Clock.GetCurrentDate();
         }
         
+        private void BindIssuersToDropdownMenu()
+        {
+            cbxIssuedBy.DataSource = _issuers;
+        }
+
         private void SetTextboxContent(TextBox textbox, DateTime date)
         {
             textbox.Text = date.ToShortDateString();
@@ -36,13 +45,13 @@ namespace BillTracker
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             string invoiceID = tbInvoiceNumber.Text;
-            string issuedBy = tbIssuedBy.Text.ToUpper(); // convert to all-uppercase for standardization
+            string issuedBy = cbxIssuedBy.Text;
             string fullSymbol = $"{tbMonthSymbol.Text}/{tbYearSymbol.Text}"; // passed by reference for validation
             DateTime issueDate = DateTime.Parse(tbIssueDate.Text);
             DateTime paymentDueDate = DateTime.Parse(tbPaymentDueDate.Text);
             string totalAmountCharged = tbTotalAmountCharged.Text; // also passed by reference for validation
 
-            Validator.Run(tbInvoiceNumber.Text, tbIssuedBy.Text, tbIssueDate.Text, tbPaymentDueDate.Text,
+            Validator.Run(tbInvoiceNumber.Text, cbxIssuedBy.Text, tbIssueDate.Text, tbPaymentDueDate.Text,
                 tbMonthSymbol.Text, tbYearSymbol.Text, tbTotalAmountCharged.Text, ref fullSymbol, ref totalAmountCharged);
 
             if (!Validator.BasicStatus)
@@ -113,7 +122,7 @@ namespace BillTracker
 
         private void btnNewIssuer_Click(object sender, EventArgs e)
         {
-            AddIssuerScreen addIssuerScreen = new AddIssuerScreen();
+            AddIssuerScreen addIssuerScreen = new AddIssuerScreen(_issuers);
             addIssuerScreen.ShowDialog();
         }
     }

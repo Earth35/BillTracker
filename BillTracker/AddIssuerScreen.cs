@@ -12,14 +12,34 @@ namespace BillTracker
 {
     public partial class AddIssuerScreen : Form
     {
-        public AddIssuerScreen()
+        BindingList<string> _issuers = new BindingList<string>();
+
+        public AddIssuerScreen(BindingList<string> issuers)
         {
             InitializeComponent();
+            _issuers = issuers;
         }
 
         private void btnAddIssuer_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Placeholder");
+            if (InputValid(tbAddIssuer.Text))
+            {
+                _issuers.Add(tbAddIssuer.Text.ToUpper());
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Wprowadź nazwę wystawiającego.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private bool InputValid(string issuer)
+        {
+            if (!String.IsNullOrWhiteSpace(issuer))
+            {
+                return true;
+            }
+            return false;
         }
 
         private void btnCancelAddingIssuer_Click(object sender, EventArgs e)

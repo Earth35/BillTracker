@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblInvoiceID = new System.Windows.Forms.Label();
             this.lblIssuedBy = new System.Windows.Forms.Label();
@@ -36,7 +37,6 @@
             this.lblPaymentDueDate = new System.Windows.Forms.Label();
             this.lblTotalAmountCharged = new System.Windows.Forms.Label();
             this.tbInvoiceNumber = new System.Windows.Forms.TextBox();
-            this.tbIssuedBy = new System.Windows.Forms.TextBox();
             this.tbMonthSymbol = new System.Windows.Forms.TextBox();
             this.tbYearSymbol = new System.Windows.Forms.TextBox();
             this.tbTotalAmountCharged = new System.Windows.Forms.TextBox();
@@ -48,6 +48,11 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnNewIssuer = new System.Windows.Forms.Button();
+            this.cbxIssuedBy = new System.Windows.Forms.ComboBox();
+            this.addingScreenBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.addingScreenBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -132,13 +137,6 @@
             this.tbInvoiceNumber.Name = "tbInvoiceNumber";
             this.tbInvoiceNumber.Size = new System.Drawing.Size(175, 20);
             this.tbInvoiceNumber.TabIndex = 7;
-            // 
-            // tbIssuedBy
-            // 
-            this.tbIssuedBy.Location = new System.Drawing.Point(158, 158);
-            this.tbIssuedBy.Name = "tbIssuedBy";
-            this.tbIssuedBy.Size = new System.Drawing.Size(175, 20);
-            this.tbIssuedBy.TabIndex = 8;
             // 
             // tbMonthSymbol
             // 
@@ -229,19 +227,29 @@
             // 
             // btnNewIssuer
             // 
-            this.btnNewIssuer.Location = new System.Drawing.Point(339, 155);
+            this.btnNewIssuer.Location = new System.Drawing.Point(336, 156);
             this.btnNewIssuer.Name = "btnNewIssuer";
             this.btnNewIssuer.Size = new System.Drawing.Size(25, 25);
             this.btnNewIssuer.TabIndex = 19;
             this.btnNewIssuer.Text = "+";
+            this.btnNewIssuer.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
             this.btnNewIssuer.UseVisualStyleBackColor = true;
             this.btnNewIssuer.Click += new System.EventHandler(this.btnNewIssuer_Click);
+            // 
+            // cbxIssuedBy
+            // 
+            this.cbxIssuedBy.FormattingEnabled = true;
+            this.cbxIssuedBy.Location = new System.Drawing.Point(158, 158);
+            this.cbxIssuedBy.Name = "cbxIssuedBy";
+            this.cbxIssuedBy.Size = new System.Drawing.Size(172, 21);
+            this.cbxIssuedBy.TabIndex = 20;
             // 
             // AddingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(823, 471);
+            this.Controls.Add(this.cbxIssuedBy);
             this.Controls.Add(this.btnNewIssuer);
             this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.btnCancel);
@@ -253,7 +261,6 @@
             this.Controls.Add(this.tbTotalAmountCharged);
             this.Controls.Add(this.tbYearSymbol);
             this.Controls.Add(this.tbMonthSymbol);
-            this.Controls.Add(this.tbIssuedBy);
             this.Controls.Add(this.tbInvoiceNumber);
             this.Controls.Add(this.lblTotalAmountCharged);
             this.Controls.Add(this.lblPaymentDueDate);
@@ -265,6 +272,8 @@
             this.Name = "AddingScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Dodaj fakturę";
+            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addingScreenBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -280,7 +289,6 @@
         private System.Windows.Forms.Label lblPaymentDueDate;
         private System.Windows.Forms.Label lblTotalAmountCharged;
         private System.Windows.Forms.TextBox tbInvoiceNumber;
-        private System.Windows.Forms.TextBox tbIssuedBy;
         private System.Windows.Forms.TextBox tbMonthSymbol;
         private System.Windows.Forms.TextBox tbYearSymbol;
         private System.Windows.Forms.TextBox tbTotalAmountCharged;
@@ -292,5 +300,8 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnNewIssuer;
+        private System.Windows.Forms.ComboBox cbxIssuedBy;
+        private System.Windows.Forms.BindingSource addingScreenBindingSource;
+        private System.Windows.Forms.BindingSource addingScreenBindingSource1;
     }
 }
