@@ -19,6 +19,7 @@ namespace BillTracker
             InitializeComponent();
             _currentDataset = dataset;
             _issuers = new BindingList<string>();
+            _issuers.Add(" ");
             _lastID = lastID;
             SetDefaultDates();
             BindIssuersToDropdownMenu();

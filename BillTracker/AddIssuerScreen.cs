@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BillTracker
@@ -24,8 +19,19 @@ namespace BillTracker
         {
             if (InputValid(tbAddIssuer.Text))
             {
-                _issuers.Add(tbAddIssuer.Text.ToUpper());
-                Close();
+                foreach (string x in _issuers)
+                {
+                    Console.WriteLine(x);
+                }
+                if (_issuers.Any(x => x == tbAddIssuer.Text.ToUpper()))
+                {
+                    MessageBox.Show("Obiekt już istnieje.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    _issuers.Add(tbAddIssuer.Text.ToUpper());
+                    Close();
+                }
             }
             else
             {
